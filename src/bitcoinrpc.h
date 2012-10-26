@@ -29,7 +29,7 @@ enum HTTPStatusCode
     HTTP_INTERNAL_SERVER_ERROR = 500,
 };
 
-// Bitcoin RPC error codes
+// Terracoin RPC error codes
 enum RPCErrorCode
 {
     // Standard JSON-RPC 2.0 errors
@@ -50,7 +50,7 @@ enum RPCErrorCode
     RPC_DESERIALIZATION_ERROR       = -22, // Error parsing or validating structure in raw format
 
     // P2P client errors
-    RPC_CLIENT_NOT_CONNECTED        = -9,  // Bitcoin is not connected
+    RPC_CLIENT_NOT_CONNECTED        = -9,  // Terracoin is not connected
     RPC_CLIENT_IN_INITIAL_DOWNLOAD  = -10, // Still downloading initial blocks
 
     // Wallet errors
@@ -99,7 +99,7 @@ public:
 };
 
 /**
- * Bitcoin RPC command dispatcher.
+ * Terracoin RPC command dispatcher.
  */
 class CRPCTable
 {
