@@ -1,6 +1,4 @@
 
-Bitcoin integration/staging tree
-
 Development process
 ===================
 
@@ -8,35 +6,20 @@ Developers work in their own trees, then submit pull requests when
 they think their feature or bug fix is ready.
 
 If it is a simple/trivial/non-controversial change, then one of the
-bitcoin development team members simply pulls it.
+terracoin development team members simply pulls it.
 
-If it is a more complicated or potentially controversial
-change, then the patch submitter will be asked to start a
-discussion (if they haven't already) on the mailing list:
-http://sourceforge.net/mailarchive/forum.php?forum_name=bitcoin-development
+Official Bitcoin patches are also regurlarly merged into Terracoin.
 
-The patch will be accepted if there is broad consensus that it is a
-good thing.  Developers should expect to rework and resubmit patches
-if they don't match the project's coding conventions (see coding.txt)
-or are controversial.
+Newly developped features and additions are submitted to **dev-x.y.z** branch,
+"x", "y" and "z" (respectively major, minor an build) matches a given Terracoin
+milestone at github project page.
 
-The master branch is regularly built and tested, but is not guaranteed
-to be completely stable. Tags are regularly created to indicate new
-official, stable release versions of Bitcoin. If you would like to
-help test the Bitcoin core, please contact QA@BitcoinTesting.org.
+When an upcoming milestone is about to be released, code from given "dev-x.y.z"
+branch is merged into corresponding "release-x.y.z" branch, for testing.
 
-Feature branches are created when there are major new features being
-worked on by several people.
+Upon validation, "release-x.y.z" branch is merged into "master" branch, and a
+new tag is created.
 
-From time to time a pull request will become outdated. If this occurs, and
-the pull is no longer automatically mergeable; a comment on the pull will
-be used to issue a warning of closure. The pull will be closed 15 days
-after the warning if action is not taken by the author. Pull requests closed
-in this manner will have their corresponding issue labeled 'stagnant'.
+Feature branches ("feature-shortname") may eventually be created when two
+or more developpers works on a common feature.
 
-Issues with no commits will be given a similar warning, and closed after
-15 days from their last activity. Issues closed in this manner will be 
-labeled 'stale'. 
-
-Requests to reopen closed pull requests and/or issues can be submitted to 
-QA@BitcoinTesting.org. 
