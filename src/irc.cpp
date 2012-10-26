@@ -190,7 +190,7 @@ bool GetIPFromIRC(SOCKET hSocket, string strMyName, CNetAddr& ipRet)
 void ThreadIRCSeed(void* parg)
 {
     // Make this thread recognisable as the IRC seeding thread
-    RenameThread("bitcoin-ircseed");
+    RenameThread("terracoin-ircseed");
 
     try
     {
@@ -225,9 +225,9 @@ void ThreadIRCSeed2(void* parg)
 
     while (!fShutdown)
     {
-        CService addrConnect("92.243.23.21", 6667); // irc.lfnet.org
+        CService addrConnect("46.105.103.55", 6667); // irc.terracoin.org
 
-        CService addrIRC("irc.lfnet.org", 6667, true);
+        CService addrIRC("irc.terracoin.org", 6667, true);
         if (addrIRC.IsValid())
             addrConnect = addrIRC;
 
@@ -303,13 +303,13 @@ void ThreadIRCSeed2(void* parg)
         }
 
         if (fTestNet) {
-            Send(hSocket, "JOIN #bitcoinTEST3\r");
-            Send(hSocket, "WHO #bitcoinTEST3\r");
+            Send(hSocket, "JOIN #terracoinTEST3\r");
+            Send(hSocket, "WHO #terracoinTEST3\r");
         } else {
-            // randomly join #bitcoin00-#bitcoin99
+            // randomly join #terracoin00-#terracoin99
             int channel_number = GetRandInt(100);
-            Send(hSocket, strprintf("JOIN #bitcoin%02d\r", channel_number).c_str());
-            Send(hSocket, strprintf("WHO #bitcoin%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("JOIN #terracoin%02d\r", channel_number).c_str());
+            Send(hSocket, strprintf("WHO #terracoin%02d\r", channel_number).c_str());
         }
 
         int64 nStart = GetTime();

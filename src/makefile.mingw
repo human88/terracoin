@@ -2,8 +2,8 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-USE_UPNP:=0
-USE_IPV6:=1
+USE_UPNP:=-
+USE_IPV6:=-
 
 INCLUDEPATHS= \
  -I"C:\boost-1.50.0-mgw" \
@@ -83,10 +83,10 @@ OBJS= \
     obj/txdb.o
 
 
-all: bitcoind.exe
+all: terracoind.exe
 
-test check: test_bitcoin.exe FORCE
-	test_bitcoin.exe
+test check: test_terracoin.exe FORCE
+	test_terracoin.exe
 
 #
 # LevelDB support
@@ -101,7 +101,7 @@ obj/leveldb.o: leveldb/libleveldb.lib
 obj/%.o: %.cpp $(HEADERS)
 	g++ -c $(CFLAGS) -o $@ $<
 
-bitcoind.exe: $(OBJS:obj/%=obj/%)
+terracoind.exe: $(OBJS:obj/%=obj/%)
 	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ $(LIBS)
 
 TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
@@ -109,11 +109,11 @@ TESTOBJS := $(patsubst test/%.cpp,obj-test/%.o,$(wildcard test/*.cpp))
 obj-test/%.o: test/%.cpp $(HEADERS)
 	g++ -c $(TESTDEFS) $(CFLAGS) -o $@ $<
 
-test_bitcoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
+test_terracoin.exe: $(TESTOBJS) $(filter-out obj/init.o,$(OBJS:obj/%=obj/%))
 	g++ $(CFLAGS) $(LDFLAGS) -o $@ $(LIBPATHS) $^ -lboost_unit_test_framework $(LIBS)
 
 clean:
-	-del /Q bitcoind test_bitcoin
+	-del /Q terracoind test_terracoin
 	-del /Q obj\*
 	-del /Q obj-test\*
 
