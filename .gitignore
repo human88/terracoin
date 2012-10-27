@@ -13,7 +13,7 @@ src/test_terracoin
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-bitcoin-qt
+terracoin-qt
 
 # Resources cpp
 qrc_*.cpp

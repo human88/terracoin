@@ -4,18 +4,18 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About Bitcoin</source>
-        <translation>Om Bitcoin</translation>
+        <source>About Terracoin</source>
+        <translation>Om Terracoin</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;Bitcoin&lt;/b&gt; version</source>
-        <translation>&lt;b&gt;Bitcoin&lt;/b&gt;-version</translation>
+        <source>&lt;b&gt;Terracoin&lt;/b&gt; version</source>
+        <translation>&lt;b&gt;Terracoin&lt;/b&gt;-version</translation>
     </message>
     <message>
         <location line="+41"/>
-        <source>Copyright © 2009-2012 The Bitcoin developers</source>
-        <translation>Copyright © 2009-2012 Bitcoin-utvecklarna</translation>
+        <source>Copyright © 2009-2012 The Terracoin developers</source>
+        <translation>Copyright © 2009-2012 Terracoin-utvecklarna</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -63,8 +63,8 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your Bitcoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
-        <translation>Detta är dina Bitcoin-adresser för att ta emot betalningar.  Du kan ge varje avsändare en egen adress så att du kan hålla reda på vem som betalar dig.</translation>
+        <source>These are your Terracoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <translation>Detta är dina Terracoin-adresser för att ta emot betalningar.  Du kan ge varje avsändare en egen adress så att du kan hålla reda på vem som betalar dig.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -78,7 +78,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a Bitcoin address</source>
+        <source>Sign a message to prove you own a Terracoin address</source>
         <translation>Signera ett meddelande för att bevisa att du äger denna adress</translation>
     </message>
     <message>
@@ -93,8 +93,8 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified Bitcoin address</source>
-        <translation>Verifiera meddelandet för att vara säker på att den var signerad med den specificerade Bitcoin-adressen</translation>
+        <source>Verify a message to ensure it was signed with a specified Terracoin address</source>
+        <translation>Verifiera meddelandet för att vara säker på att den var signerad med den specificerade Terracoin-adressen</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -224,7 +224,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR TERRACOINS&lt;/b&gt;!</source>
         <translation>VARNING: Om du krypterar din plånbok och glömmer ditt lösenord, kommer du att &lt;b&gt;FÖRLORA ALLA DINA TILLGÅNGAR&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -251,7 +251,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="-56"/>
-        <source>Bitcoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
+        <source>Terracoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your terracoins from being stolen by malware infecting your computer.</source>
         <translation>Programmet kommer nu att stänga ner för att färdigställa krypteringen. Tänk på att en krypterad plånbok inte skyddar mot stöld om din dator är infekterad med en keylogger.</translation>
     </message>
     <message>
@@ -297,9 +297,9 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
 </context>
 <context>
-    <name>BitcoinGUI</name>
+    <name>TerracoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+257"/>
+        <location filename="../terracoingui.cpp" line="+257"/>
         <source>Sign &amp;message...</source>
         <translation>Signera &amp;Meddelande...</translation>
     </message>
@@ -341,7 +341,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     <message>
         <location line="-13"/>
         <source>&amp;Receive coins</source>
-        <translation>&amp;Ta emot bitcoins</translation>
+        <translation>&amp;Ta emot terracoins</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -351,7 +351,7 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     <message>
         <location line="-7"/>
         <source>&amp;Send coins</source>
-        <translation>&amp;Skicka bitcoins</translation>
+        <translation>&amp;Skicka terracoins</translation>
     </message>
     <message>
         <location line="+35"/>
@@ -365,8 +365,8 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about Bitcoin</source>
-        <translation>Visa information om Bitcoin</translation>
+        <source>Show information about Terracoin</source>
+        <translation>Visa information om Terracoin</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -415,13 +415,13 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="-58"/>
-        <source>Send coins to a Bitcoin address</source>
-        <translation>Skicka mynt till en Bitcoin-adress</translation>
+        <source>Send coins to a Terracoin address</source>
+        <translation>Skicka mynt till en Terracoin-adress</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for Bitcoin</source>
-        <translation>Ändra konfigurationsalternativ för Bitcoin</translation>
+        <source>Modify configuration options for Terracoin</source>
+        <translation>Ändra konfigurationsalternativ för Terracoin</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -460,8 +460,8 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="-186"/>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Terracoin</source>
+        <translation>Terracoin</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -470,8 +470,8 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     </message>
     <message>
         <location line="+168"/>
-        <source>&amp;About Bitcoin</source>
-        <translation>&amp;Om Bitcoin</translation>
+        <source>&amp;About Terracoin</source>
+        <translation>&amp;Om Terracoin</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -512,13 +512,13 @@ Denna produkten innehåller mjukvara utvecklad av OpenSSL Project för användni
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>Bitcoin client</source>
-        <translation>Bitcoin-klient</translation>
+        <source>Terracoin client</source>
+        <translation>Terracoin-klient</translation>
     </message>
     <message numerus="yes">
         <location line="+69"/>
-        <source>%n active connection(s) to Bitcoin network</source>
-        <translation><numerusform>%n aktiv anslutning till Bitcoin-nätverket</numerusform><numerusform>%n aktiva anslutningar till Bitcoin-nätverket</numerusform></translation>
+        <source>%n active connection(s) to Terracoin network</source>
+        <translation><numerusform>%n aktiv anslutning till Terracoin-nätverket</numerusform><numerusform>%n aktiva anslutningar till Terracoin-nätverket</numerusform></translation>
     </message>
     <message>
         <location line="+40"/>
@@ -602,8 +602,8 @@ Adress: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
-        <translation>URI går inte att tolkas! Detta kan orsakas av en ogiltig Bitcoin-adress eller felaktiga URI parametrar.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid Terracoin address or malformed URI parameters.</source>
+        <translation>URI går inte att tolkas! Detta kan orsakas av en ogiltig Terracoin-adress eller felaktiga URI parametrar.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -636,9 +636,9 @@ Adress: %4
         <translation>Det inträffade ett fel när plånboken skulle sparas till den nya platsen.</translation>
     </message>
     <message>
-        <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. Bitcoin can no longer continue safely and will quit.</source>
-        <translation>Ett allvarligt fel har uppstått. Bitcoin kan inte längre köras säkert och kommer att avslutas.</translation>
+        <location filename="../terracoin.cpp" line="+109"/>
+        <source>A fatal error occurred. Terracoin can no longer continue safely and will quit.</source>
+        <translation>Ett allvarligt fel har uppstått. Terracoin kan inte längre köras säkert och kommer att avslutas.</translation>
     </message>
 </context>
 <context>
@@ -703,8 +703,8 @@ Adress: %4
     </message>
     <message>
         <location line="+5"/>
-        <source>The entered address &quot;%1&quot; is not a valid Bitcoin address.</source>
-        <translation>Den angivna adressen &quot;%1&quot; är inte en giltig Bitcoin-adress.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid Terracoin address.</source>
+        <translation>Den angivna adressen &quot;%1&quot; är inte en giltig Terracoin-adress.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -722,8 +722,8 @@ Adress: %4
     <message>
         <location filename="../guiutil.cpp" line="+419"/>
         <location line="+12"/>
-        <source>Bitcoin-Qt</source>
-        <translation>Bitcoin-Qt</translation>
+        <source>Terracoin-Qt</source>
+        <translation>Terracoin-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -785,13 +785,13 @@ Adress: %4
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start Bitcoin after logging in to the system.</source>
-        <translation>Starta Bitcoin automatiskt efter inloggning.</translation>
+        <source>Automatically start Terracoin after logging in to the system.</source>
+        <translation>Starta Terracoin automatiskt efter inloggning.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start Bitcoin on system login</source>
-        <translation>&amp;Starta Bitcoin vid systemstart</translation>
+        <source>&amp;Start Terracoin on system login</source>
+        <translation>&amp;Starta Terracoin vid systemstart</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -810,8 +810,8 @@ Adress: %4
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Öppna automatiskt Bitcoin-klientens port på routern. Detta fungerar endast om din router har UPnP aktiverat.</translation>
+        <source>Automatically open the Terracoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Öppna automatiskt Terracoin-klientens port på routern. Detta fungerar endast om din router har UPnP aktiverat.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -820,8 +820,8 @@ Adress: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the Bitcoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Anslut till Bitcoin-nätverket genom en SOCKS-proxy (t.ex. när du ansluter genom Tor).</translation>
+        <source>Connect to the Terracoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Anslut till Terracoin-nätverket genom en SOCKS-proxy (t.ex. när du ansluter genom Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -895,8 +895,8 @@ Adress: %4
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting Bitcoin.</source>
-        <translation>Användargränssnittets språk kan ställas in här. Denna inställning träder i kraft efter en omstart av Bitcoin.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Terracoin.</source>
+        <translation>Användargränssnittets språk kan ställas in här. Denna inställning träder i kraft efter en omstart av Terracoin.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -910,8 +910,8 @@ Adress: %4
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show Bitcoin addresses in the transaction list or not.</source>
-        <translation>Anger om Bitcoin-adresser skall visas i transaktionslistan.</translation>
+        <source>Whether to show Terracoin addresses in the transaction list or not.</source>
+        <translation>Anger om Terracoin-adresser skall visas i transaktionslistan.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -947,8 +947,8 @@ Adress: %4
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting Bitcoin.</source>
-        <translation>Denna inställning träder i kraft efter en omstart av Bitcoin.</translation>
+        <source>This setting will take effect after restarting Terracoin.</source>
+        <translation>Denna inställning träder i kraft efter en omstart av Terracoin.</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -966,8 +966,8 @@ Adress: %4
     <message>
         <location line="+33"/>
         <location line="+183"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Den visade informationen kan vara inaktuell. Plånboken synkroniseras automatiskt med Bitcoin-nätverket efter att anslutningen är upprättad, men denna process har inte slutförts ännu.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Terracoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Den visade informationen kan vara inaktuell. Plånboken synkroniseras automatiskt med Terracoin-nätverket efter att anslutningen är upprättad, men denna process har inte slutförts ännu.</translation>
     </message>
     <message>
         <location line="-141"/>
@@ -1172,8 +1172,8 @@ Adress: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the Bitcoin-Qt help message to get a list with possible Bitcoin command-line options.</source>
-        <translation>Visa Bitcoin-Qt hjälpmeddelande för att få en lista med möjliga Bitcoin kommandoradsalternativ.</translation>
+        <source>Show the Terracoin-Qt help message to get a list with possible Terracoin command-line options.</source>
+        <translation>Visa Terracoin-Qt hjälpmeddelande för att få en lista med möjliga Terracoin kommandoradsalternativ.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1192,13 +1192,13 @@ Adress: %4
     </message>
     <message>
         <location line="-104"/>
-        <source>Bitcoin - Debug window</source>
-        <translation>Bitcoin - Debug fönster</translation>
+        <source>Terracoin - Debug window</source>
+        <translation>Terracoin - Debug fönster</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>Bitcoin Core</source>
-        <translation>Bitcoin Kärna</translation>
+        <source>Terracoin Core</source>
+        <translation>Terracoin Kärna</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1207,8 +1207,8 @@ Adress: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the Bitcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Öppna Bitcoin debug-loggfilen som finns i datakatalogen. Detta kan ta några sekunder för stora loggfiler.</translation>
+        <source>Open the Terracoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Öppna Terracoin debug-loggfilen som finns i datakatalogen. Detta kan ta några sekunder för stora loggfiler.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1217,8 +1217,8 @@ Adress: %4
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the Bitcoin RPC console.</source>
-        <translation>Välkommen till Bitcoin RPC-konsollen.</translation>
+        <source>Welcome to the Terracoin RPC console.</source>
+        <translation>Välkommen till Terracoin RPC-konsollen.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1272,8 +1272,8 @@ Adress: %4
     </message>
     <message>
         <location line="+10"/>
-        <source>123.456 BTC</source>
-        <translation>123,456 BTC</translation>
+        <source>123.456 TRC</source>
+        <translation>123,456 TRC</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1401,8 +1401,8 @@ Adress: %4
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Ange en Bitcoin-adress (t.ex. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <source>Enter a Terracoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
+        <translation>Ange en Terracoin-adress (t.ex. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
 </context>
 <context>
@@ -1462,7 +1462,7 @@ Adress: %4
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this Bitcoin address</source>
+        <source>Sign the message to prove you own this Terracoin address</source>
         <translation>Signera meddelandet för att bevisa att du äger denna adress</translation>
     </message>
     <message>
@@ -1494,8 +1494,8 @@ Adress: %4
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
-        <translation>Verifiera meddelandet för att vara säker på att den var signerad med den angivna Bitcoin-adressen</translation>
+        <source>Verify the message to ensure it was signed with the specified Terracoin address</source>
+        <translation>Verifiera meddelandet för att vara säker på att den var signerad med den angivna Terracoin-adressen</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -1505,8 +1505,8 @@ Adress: %4
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Ange en Bitcoin-adress (t.ex. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <source>Enter a Terracoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
+        <translation>Ange en Terracoin-adress (t.ex. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -1515,8 +1515,8 @@ Adress: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter Bitcoin signature</source>
-        <translation>Ange Bitcoin-signatur</translation>
+        <source>Enter Terracoin signature</source>
+        <translation>Ange Terracoin-signatur</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2063,11 +2063,11 @@ Adress: %4
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>terracoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+71"/>
-        <source>Bitcoin version</source>
-        <translation>Bitcoin version</translation>
+        <location filename="../terracoinstrings.cpp" line="+71"/>
+        <source>Terracoin version</source>
+        <translation>Terracoin version</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2076,8 +2076,8 @@ Adress: %4
     </message>
     <message>
         <location line="-25"/>
-        <source>Send command to -server or bitcoind</source>
-        <translation>Skicka kommando till -server eller bitcoind</translation>
+        <source>Send command to -server or terracoind</source>
+        <translation>Skicka kommando till -server eller terracoind</translation>
     </message>
     <message>
         <location line="-19"/>
@@ -2096,13 +2096,13 @@ Adress: %4
     </message>
     <message>
         <location line="+23"/>
-        <source>Specify configuration file (default: bitcoin.conf)</source>
-        <translation>Ange konfigurationsfil (förvalt: bitcoin.conf)</translation>
+        <source>Specify configuration file (default: terracoin.conf)</source>
+        <translation>Ange konfigurationsfil (förvalt: terracoin.conf)</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Specify pid file (default: bitcoind.pid)</source>
-        <translation>Ange pid fil (förvalt: bitcoind.pid)</translation>
+        <source>Specify pid file (default: terracoind.pid)</source>
+        <translation>Ange pid fil (förvalt: terracoind.pid)</translation>
     </message>
     <message>
         <location line="-47"/>
@@ -2231,8 +2231,8 @@ Adress: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Bitcoin will not work properly.</source>
-        <translation>Varning: Vänligen kolla så att din dators datum och tid är korrekt! Om din klocka går fel kommer Bitcoin inte fungera korrekt.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Terracoin will not work properly.</source>
+        <translation>Varning: Vänligen kolla så att din dators datum och tid är korrekt! Om din klocka går fel kommer Terracoin inte fungera korrekt.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -2296,8 +2296,8 @@ Adress: %4
     </message>
     <message>
         <location line="+4"/>
-        <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
-        <translation>SSL-inställningar: (se Bitcoin-wikin för SSL-setup instruktioner)</translation>
+        <source>SSL options: (see the Terracoin Wiki for SSL setup instructions)</source>
+        <translation>SSL-inställningar: (se Terracoin-wikin för SSL-setup instruktioner)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2441,13 +2441,13 @@ Adress: %4
     </message>
     <message>
         <location line="-120"/>
-        <source>Cannot obtain a lock on data directory %s.  Bitcoin is probably already running.</source>
-        <translation>Kan inte låsa data-mappen %s.  Bitcoin körs förmodligen redan.</translation>
+        <source>Cannot obtain a lock on data directory %s.  Terracoin is probably already running.</source>
+        <translation>Kan inte låsa data-mappen %s.  Terracoin körs förmodligen redan.</translation>
     </message>
     <message>
         <location line="+46"/>
-        <source>Bitcoin</source>
-        <translation>Bitcoin</translation>
+        <source>Terracoin</source>
+        <translation>Terracoin</translation>
     </message>
     <message>
         <location line="+77"/>
@@ -2481,13 +2481,13 @@ Adress: %4
     </message>
     <message>
         <location line="+1"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of Bitcoin</source>
-        <translation>Fel vid inläsningen av wallet.dat: Plånboken kräver en senare version av Bitcoin</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Terracoin</source>
+        <translation>Fel vid inläsningen av wallet.dat: Plånboken kräver en senare version av Terracoin</translation>
     </message>
     <message>
         <location line="+72"/>
-        <source>Wallet needed to be rewritten: restart Bitcoin to complete</source>
-        <translation>Plånboken behöver skrivas om: Starta om Bitcoin för att färdigställa</translation>
+        <source>Wallet needed to be rewritten: restart Terracoin to complete</source>
+        <translation>Plånboken behöver skrivas om: Starta om Terracoin för att färdigställa</translation>
     </message>
     <message>
         <location line="-74"/>
@@ -2537,7 +2537,7 @@ Adress: %4
     <message>
         <location line="-56"/>
         <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds  </source>
-        <translation>Fel: Denna transaktion kräver en transaktionsavgift på minst %s på grund av dess storlek, komplexitet, eller användning av senast mottagna bitcoins  </translation>
+        <translation>Fel: Denna transaktion kräver en transaktionsavgift på minst %s på grund av dess storlek, komplexitet, eller användning av senast mottagna terracoins  </translation>
     </message>
     <message>
         <location line="+55"/>
@@ -2562,7 +2562,7 @@ Adress: %4
     <message>
         <location line="-4"/>
         <source>Insufficient funds</source>
-        <translation>Otillräckligt med bitcoins</translation>
+        <translation>Otillräckligt med terracoins</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -2576,8 +2576,8 @@ Adress: %4
     </message>
     <message>
         <location line="-18"/>
-        <source>Unable to bind to %s on this computer. Bitcoin is probably already running.</source>
-        <translation>Det går inte att binda till %s på den här datorn. Bitcoin är förmodligen redan igång.</translation>
+        <source>Unable to bind to %s on this computer. Terracoin is probably already running.</source>
+        <translation>Det går inte att binda till %s på den här datorn. Terracoin är förmodligen redan igång.</translation>
     </message>
     <message>
         <location line="+47"/>
@@ -2629,7 +2629,7 @@ Adress: %4
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=bitcoinrpc
+rpcuser=terracoinrpc
 rpcpassword=%s
 (you do not need to remember this password)
 If the file does not exist, create it with owner-readable-only file permissions.
@@ -2637,7 +2637,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>%s, du behöver sätta ett rpclösensord i konfigurationsfilen:
  %s
 Det är rekommenderat att använda följande slumpade lösenord:
-rpcuser=bitcoinrpc
+rpcuser=terracoinrpc
 rpcpassword=%s
 (du behöver inte komma ihåg lösenordet)
 Om filen inte existerar, skapa den med enbart ägarläsbara filrättigheter.
