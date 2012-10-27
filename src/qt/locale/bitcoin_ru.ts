@@ -4,18 +4,18 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About Bitcoin</source>
-        <translation>О Bitcoin</translation>
+        <source>About Terracoin</source>
+        <translation>О Terracoin</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;Bitcoin&lt;/b&gt; version</source>
-        <translation>&lt;b&gt;Bitcoin&lt;/b&gt; версия</translation>
+        <source>&lt;b&gt;Terracoin&lt;/b&gt; version</source>
+        <translation>&lt;b&gt;Terracoin&lt;/b&gt; версия</translation>
     </message>
     <message>
         <location line="+41"/>
-        <source>Copyright © 2009-2012 The Bitcoin developers</source>
-        <translation>Все права защищены © 2009-2012 Разработчики Bitcoin</translation>
+        <source>Copyright © 2009-2012 The Terracoin developers</source>
+        <translation>Все права защищены © 2009-2012 Разработчики Terracoin</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -62,7 +62,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your Bitcoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <source>These are your Terracoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
         <translation>Это Ваши адреса для получения платежей. Вы можете дать разные адреса отправителям, чтобы отслеживать, кто именно вам платит.</translation>
     </message>
     <message>
@@ -77,8 +77,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a Bitcoin address</source>
-        <translation>Подписать сообщение, чтобы доказать владение адресом Bitcoin</translation>
+        <source>Sign a message to prove you own a Terracoin address</source>
+        <translation>Подписать сообщение, чтобы доказать владение адресом Terracoin</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -92,8 +92,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified Bitcoin address</source>
-        <translation>Проверить сообщение, чтобы убедиться, что оно было подписано указанным адресом Bitcoin</translation>
+        <source>Verify a message to ensure it was signed with a specified Terracoin address</source>
+        <translation>Проверить сообщение, чтобы убедиться, что оно было подписано указанным адресом Terracoin</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -223,7 +223,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR TERRACOINS&lt;/b&gt;!</source>
         <translation>Внимание: если вы зашифруете бумажник и потеряете пароль, вы &lt;b&gt;ПОТЕРЯЕТЕ ВСЕ ВАШИ БИТКОИНЫ&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -250,7 +250,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-56"/>
-        <source>Bitcoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
+        <source>Terracoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your terracoins from being stolen by malware infecting your computer.</source>
         <translation>Сейчас программа закроется для завершения процесса шифрования. Помните, что шифрование вашего бумажника не может полностью защитить ваши биткоины от кражи с помощью инфицирования вашего компьютера вредоносным ПО.</translation>
     </message>
     <message>
@@ -296,9 +296,9 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
 </context>
 <context>
-    <name>BitcoinGUI</name>
+    <name>TerracoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+257"/>
+        <location filename="../terracoingui.cpp" line="+257"/>
         <source>Sign &amp;message...</source>
         <translation>&amp;Подписать сообщение</translation>
     </message>
@@ -364,8 +364,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about Bitcoin</source>
-        <translation>Показать информацию о Bitcoin&apos;е</translation>
+        <source>Show information about Terracoin</source>
+        <translation>Показать информацию о Terracoin&apos;е</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -414,13 +414,13 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-58"/>
-        <source>Send coins to a Bitcoin address</source>
-        <translation>Отправить монеты на указанный адрес Bitcoin</translation>
+        <source>Send coins to a Terracoin address</source>
+        <translation>Отправить монеты на указанный адрес Terracoin</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for Bitcoin</source>
-        <translation>Изменить параметры конфигурации Bitcoin</translation>
+        <source>Modify configuration options for Terracoin</source>
+        <translation>Изменить параметры конфигурации Terracoin</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -459,7 +459,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-186"/>
-        <source>Bitcoin</source>
+        <source>Terracoin</source>
         <translation>Биткоин</translation>
     </message>
     <message>
@@ -469,8 +469,8 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+168"/>
-        <source>&amp;About Bitcoin</source>
-        <translation>&amp;О Bitcoin</translation>
+        <source>&amp;About Terracoin</source>
+        <translation>&amp;О Terracoin</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -511,12 +511,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>Bitcoin client</source>
-        <translation>Bitcoin клиент</translation>
+        <source>Terracoin client</source>
+        <translation>Terracoin клиент</translation>
     </message>
     <message numerus="yes">
         <location line="+69"/>
-        <source>%n active connection(s) to Bitcoin network</source>
+        <source>%n active connection(s) to Terracoin network</source>
         <translation><numerusform>%n активное соединение с сетью</numerusform><numerusform>%n активных соединений с сетью</numerusform><numerusform>%n активных соединений с сетью</numerusform></translation>
     </message>
     <message>
@@ -601,8 +601,8 @@ Address: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
-        <translation>Не удалось обработать URI! Это может быть связано с неверным адресом Bitcoin или неправильными параметрами URI.</translation>
+        <source>URI can not be parsed! This can be caused by an invalid Terracoin address or malformed URI parameters.</source>
+        <translation>Не удалось обработать URI! Это может быть связано с неверным адресом Terracoin или неправильными параметрами URI.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -635,9 +635,9 @@ Address: %4
         <translation>При попытке сохранения данных бумажника в новое место произошла ошибка.</translation>
     </message>
     <message>
-        <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. Bitcoin can no longer continue safely and will quit.</source>
-        <translation>Произошла неисправимая ошибка. Bitcoin не может безопасно продолжать работу и будет закрыт.</translation>
+        <location filename="../terracoin.cpp" line="+109"/>
+        <source>A fatal error occurred. Terracoin can no longer continue safely and will quit.</source>
+        <translation>Произошла неисправимая ошибка. Terracoin не может безопасно продолжать работу и будет закрыт.</translation>
     </message>
 </context>
 <context>
@@ -702,8 +702,8 @@ Address: %4
     </message>
     <message>
         <location line="+5"/>
-        <source>The entered address &quot;%1&quot; is not a valid Bitcoin address.</source>
-        <translation>Введённый адрес &quot;%1&quot; не является правильным Bitcoin-адресом.</translation>
+        <source>The entered address &quot;%1&quot; is not a valid Terracoin address.</source>
+        <translation>Введённый адрес &quot;%1&quot; не является правильным Terracoin-адресом.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -721,8 +721,8 @@ Address: %4
     <message>
         <location filename="../guiutil.cpp" line="+419"/>
         <location line="+12"/>
-        <source>Bitcoin-Qt</source>
-        <translation>Bitcoin-Qt</translation>
+        <source>Terracoin-Qt</source>
+        <translation>Terracoin-Qt</translation>
     </message>
     <message>
         <location line="-12"/>
@@ -784,13 +784,13 @@ Address: %4
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start Bitcoin after logging in to the system.</source>
-        <translation>Автоматически запускать Bitcoin после входа в систему</translation>
+        <source>Automatically start Terracoin after logging in to the system.</source>
+        <translation>Автоматически запускать Terracoin после входа в систему</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start Bitcoin on system login</source>
-        <translation>&amp;Запускать Bitcoin при входе в систему</translation>
+        <source>&amp;Start Terracoin on system login</source>
+        <translation>&amp;Запускать Terracoin при входе в систему</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -809,8 +809,8 @@ Address: %4
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Автоматически открыть порт для Bitcoin-клиента на роутере. Работает только если Ваш роутер поддерживает UPnP, и данная функция включена.</translation>
+        <source>Automatically open the Terracoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Автоматически открыть порт для Terracoin-клиента на роутере. Работает только если Ваш роутер поддерживает UPnP, и данная функция включена.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -819,8 +819,8 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the Bitcoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
-        <translation>Подключаться к сети Bitcoin через прокси SOCKS (например, при подключении через Tor).</translation>
+        <source>Connect to the Terracoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <translation>Подключаться к сети Terracoin через прокси SOCKS (например, при подключении через Tor).</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -894,8 +894,8 @@ Address: %4
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting Bitcoin.</source>
-        <translation>Здесь можно выбрать язык интерфейса. Настройки вступят в силу после перезапуска Bitcoin.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Terracoin.</source>
+        <translation>Здесь можно выбрать язык интерфейса. Настройки вступят в силу после перезапуска Terracoin.</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -909,8 +909,8 @@ Address: %4
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show Bitcoin addresses in the transaction list or not.</source>
-        <translation>Показывать ли адреса Bitcoin в списке транзакций.</translation>
+        <source>Whether to show Terracoin addresses in the transaction list or not.</source>
+        <translation>Показывать ли адреса Terracoin в списке транзакций.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -946,8 +946,8 @@ Address: %4
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting Bitcoin.</source>
-        <translation>Эта настройка вступит в силу после перезапуска Bitcoin</translation>
+        <source>This setting will take effect after restarting Terracoin.</source>
+        <translation>Эта настройка вступит в силу после перезапуска Terracoin</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -965,8 +965,8 @@ Address: %4
     <message>
         <location line="+33"/>
         <location line="+183"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
-        <translation>Отображаемая информация может быть устаревшей. Ваш бумажник автоматически синхронизируется с сетью Bitcoin после подключения, но этот процесс пока не завершён.</translation>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Terracoin network after a connection is established, but this process has not completed yet.</source>
+        <translation>Отображаемая информация может быть устаревшей. Ваш бумажник автоматически синхронизируется с сетью Terracoin после подключения, но этот процесс пока не завершён.</translation>
     </message>
     <message>
         <location line="-141"/>
@@ -1171,8 +1171,8 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the Bitcoin-Qt help message to get a list with possible Bitcoin command-line options.</source>
-        <translation>Показать помощь по Bitcoin-Qt, чтобы получить список доступных параметров командной строки.</translation>
+        <source>Show the Terracoin-Qt help message to get a list with possible Terracoin command-line options.</source>
+        <translation>Показать помощь по Terracoin-Qt, чтобы получить список доступных параметров командной строки.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -1191,13 +1191,13 @@ Address: %4
     </message>
     <message>
         <location line="-104"/>
-        <source>Bitcoin - Debug window</source>
-        <translation>Bitcoin - Окно отладки</translation>
+        <source>Terracoin - Debug window</source>
+        <translation>Terracoin - Окно отладки</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>Bitcoin Core</source>
-        <translation>Ядро Bitcoin</translation>
+        <source>Terracoin Core</source>
+        <translation>Ядро Terracoin</translation>
     </message>
     <message>
         <location line="+279"/>
@@ -1206,8 +1206,8 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the Bitcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Открыть отладочный лог-файл Bitcoin из текущего каталога данных. Это может занять несколько секунд для больших лог-файлов.</translation>
+        <source>Open the Terracoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Открыть отладочный лог-файл Terracoin из текущего каталога данных. Это может занять несколько секунд для больших лог-файлов.</translation>
     </message>
     <message>
         <location line="+102"/>
@@ -1216,8 +1216,8 @@ Address: %4
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the Bitcoin RPC console.</source>
-        <translation>Добро пожаловать в RPC-консоль Bitcoin.</translation>
+        <source>Welcome to the Terracoin RPC console.</source>
+        <translation>Добро пожаловать в RPC-консоль Terracoin.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1271,8 +1271,8 @@ Address: %4
     </message>
     <message>
         <location line="+10"/>
-        <source>123.456 BTC</source>
-        <translation>123.456 BTC</translation>
+        <source>123.456 TRC</source>
+        <translation>123.456 TRC</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1400,8 +1400,8 @@ Address: %4
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Введите Bitcoin-адрес (например 1LA5FtQhnnWnkK6zjFfutR7Stiit4wKd63)</translation>
+        <source>Enter a Terracoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
+        <translation>Введите Terracoin-адрес (например 1LA5FtQhnnWnkK6zjFfutR7Stiit4wKd63)</translation>
     </message>
 </context>
 <context>
@@ -1461,8 +1461,8 @@ Address: %4
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this Bitcoin address</source>
-        <translation>Подписать сообщение, чтобы доказать владение адресом Bitcoin</translation>
+        <source>Sign the message to prove you own this Terracoin address</source>
+        <translation>Подписать сообщение, чтобы доказать владение адресом Terracoin</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -1493,8 +1493,8 @@ Address: %4
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
-        <translation>Проверить сообщение, чтобы убедиться, что оно было подписано указанным адресом Bitcoin</translation>
+        <source>Verify the message to ensure it was signed with the specified Terracoin address</source>
+        <translation>Проверить сообщение, чтобы убедиться, что оно было подписано указанным адресом Terracoin</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -1504,8 +1504,8 @@ Address: %4
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Введите адрес Bitcoin (напр. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
+        <source>Enter a Terracoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
+        <translation>Введите адрес Terracoin (напр. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
     <message>
         <location line="-2"/>
@@ -1514,8 +1514,8 @@ Address: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter Bitcoin signature</source>
-        <translation>Введите подпись Bitcoin</translation>
+        <source>Enter Terracoin signature</source>
+        <translation>Введите подпись Terracoin</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -2062,10 +2062,10 @@ Address: %4
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>terracoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+71"/>
-        <source>Bitcoin version</source>
+        <location filename="../terracoinstrings.cpp" line="+71"/>
+        <source>Terracoin version</source>
         <translation>Версия</translation>
     </message>
     <message>
@@ -2075,8 +2075,8 @@ Address: %4
     </message>
     <message>
         <location line="-25"/>
-        <source>Send command to -server or bitcoind</source>
-        <translation>Отправить команду на -server или bitcoind</translation>
+        <source>Send command to -server or terracoind</source>
+        <translation>Отправить команду на -server или terracoind</translation>
     </message>
     <message>
         <location line="-19"/>
@@ -2096,13 +2096,13 @@ Address: %4
     </message>
     <message>
         <location line="+23"/>
-        <source>Specify configuration file (default: bitcoin.conf)</source>
-        <translation>Указать конфигурационный файл (по умолчанию: bitcoin.conf)</translation>
+        <source>Specify configuration file (default: terracoin.conf)</source>
+        <translation>Указать конфигурационный файл (по умолчанию: terracoin.conf)</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Specify pid file (default: bitcoind.pid)</source>
-        <translation>Указать pid-файл (по умолчанию: bitcoin.pid)</translation>
+        <source>Specify pid file (default: terracoind.pid)</source>
+        <translation>Указать pid-файл (по умолчанию: terracoin.pid)</translation>
     </message>
     <message>
         <location line="-47"/>
@@ -2231,8 +2231,8 @@ Address: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Bitcoin will not work properly.</source>
-        <translation>Внимание: убедитесь, что дата и время на Вашем компьютере выставлены верно. Если Ваши часы идут неправильно, Bitcoin будет работать некорректно.</translation>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Terracoin will not work properly.</source>
+        <translation>Внимание: убедитесь, что дата и время на Вашем компьютере выставлены верно. Если Ваши часы идут неправильно, Terracoin будет работать некорректно.</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -2296,9 +2296,9 @@ Address: %4
     </message>
     <message>
         <location line="+4"/>
-        <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
+        <source>SSL options: (see the Terracoin Wiki for SSL setup instructions)</source>
         <translation>
-Параметры SSL: (см. Bitcoin Wiki для инструкций по настройке SSL)</translation>
+Параметры SSL: (см. Terracoin Wiki для инструкций по настройке SSL)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2442,12 +2442,12 @@ Address: %4
     </message>
     <message>
         <location line="-120"/>
-        <source>Cannot obtain a lock on data directory %s.  Bitcoin is probably already running.</source>
+        <source>Cannot obtain a lock on data directory %s.  Terracoin is probably already running.</source>
         <translation>Невозможно установить блокировку на рабочую директорию %s.  Возможно, бумажник уже запущен.</translation>
     </message>
     <message>
         <location line="+46"/>
-        <source>Bitcoin</source>
+        <source>Terracoin</source>
         <translation>Биткоин</translation>
     </message>
     <message>
@@ -2482,13 +2482,13 @@ Address: %4
     </message>
     <message>
         <location line="+1"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of Bitcoin</source>
-        <translation>Ошибка загрузки wallet.dat: бумажник требует более новую версию Bitcoin</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Terracoin</source>
+        <translation>Ошибка загрузки wallet.dat: бумажник требует более новую версию Terracoin</translation>
     </message>
     <message>
         <location line="+72"/>
-        <source>Wallet needed to be rewritten: restart Bitcoin to complete</source>
-        <translation>Необходимо перезаписать бумажник, перезапустите Bitcoin для завершения операции.</translation>
+        <source>Wallet needed to be rewritten: restart Terracoin to complete</source>
+        <translation>Необходимо перезаписать бумажник, перезапустите Terracoin для завершения операции.</translation>
     </message>
     <message>
         <location line="-74"/>
@@ -2577,8 +2577,8 @@ Address: %4
     </message>
     <message>
         <location line="-18"/>
-        <source>Unable to bind to %s on this computer. Bitcoin is probably already running.</source>
-        <translation>Невозможно привязаться к %s на этом компьютере.  Возможно, Bitcoin уже работает.</translation>
+        <source>Unable to bind to %s on this computer. Terracoin is probably already running.</source>
+        <translation>Невозможно привязаться к %s на этом компьютере.  Возможно, Terracoin уже работает.</translation>
     </message>
     <message>
         <location line="+47"/>
@@ -2630,7 +2630,7 @@ Address: %4
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=bitcoinrpc
+rpcuser=terracoinrpc
 rpcpassword=%s
 (you do not need to remember this password)
 If the file does not exist, create it with owner-readable-only file permissions.
@@ -2638,7 +2638,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>%s, вы должны установить опцию rpcpassword в конфигурационном файле:
  %s
 Рекомендуется использовать следующий случайный пароль:
-rpcuser=bitcoinrpc
+rpcuser=terracoinrpc
 rpcpassword=%s
 (вам не нужно запоминать этот пароль)
 Если файл не существует, создайте его и установите права доступа только для владельца.

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About Bitcoin</string>
+   <string>About Terracoin</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
@@ -23,7 +23,7 @@
       </sizepolicy>
      </property>
      <property name="pixmap">
-      <pixmap resource="../bitcoin.qrc">:/images/about</pixmap>
+      <pixmap resource="../terracoin.qrc">:/images/about</pixmap>
      </property>
     </widget>
    </item>
@@ -50,7 +50,7 @@
           <cursorShape>IBeamCursor</cursorShape>
          </property>
          <property name="text">
-          <string>&lt;b&gt;Bitcoin&lt;/b&gt; version</string>
+          <string>&lt;b&gt;Terracoin&lt;/b&gt; version</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -91,7 +91,7 @@
         <cursorShape>IBeamCursor</cursorShape>
        </property>
        <property name="text">
-        <string>Copyright © 2009-2012 The Bitcoin developers</string>
+        <string>Copyright © 2009-2012 The Terracoin developers</string>
        </property>
        <property name="textInteractionFlags">
         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -147,7 +147,7 @@ This product includes software developed by the OpenSSL Project for use in the O
   </layout>
  </widget>
  <resources>
-  <include location="../bitcoin.qrc"/>
+  <include location="../terracoin.qrc"/>
  </resources>
  <connections>
   <connection>
