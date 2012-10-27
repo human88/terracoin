@@ -4,18 +4,18 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../forms/aboutdialog.ui" line="+14"/>
-        <source>About Bitcoin</source>
+        <source>About Terracoin</source>
         <translation>關於位元幣</translation>
     </message>
     <message>
         <location line="+39"/>
-        <source>&lt;b&gt;Bitcoin&lt;/b&gt; version</source>
+        <source>&lt;b&gt;Terracoin&lt;/b&gt; version</source>
         <translation>&lt;b&gt;位元幣&lt;/b&gt;版本</translation>
     </message>
     <message>
         <location line="+41"/>
-        <source>Copyright © 2009-2012 The Bitcoin developers</source>
-        <translation>版權為 Bitcoin 開發人員自西元 2009 至 2012 年起所有</translation>
+        <source>Copyright © 2009-2012 The Terracoin developers</source>
+        <translation>版權為 Terracoin 開發人員自西元 2009 至 2012 年起所有</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -62,7 +62,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-46"/>
-        <source>These are your Bitcoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
+        <source>These are your Terracoin addresses for receiving payments. You may want to give a different one to each sender so you can keep track of who is paying you.</source>
         <translation>這些是你用來收款的位元幣位址. 你可以提供不同的位址給不同的付款人, 來追蹤是誰支付給你.</translation>
     </message>
     <message>
@@ -77,7 +77,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+11"/>
-        <source>Sign a message to prove you own a Bitcoin address</source>
+        <source>Sign a message to prove you own a Terracoin address</source>
         <translation>簽署一則訊息來證明一個位元幣位址是你的</translation>
     </message>
     <message>
@@ -92,7 +92,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-14"/>
-        <source>Verify a message to ensure it was signed with a specified Bitcoin address</source>
+        <source>Verify a message to ensure it was signed with a specified Terracoin address</source>
         <translation>驗證一則訊息來確認它是用指定的位元幣位址簽署的</translation>
     </message>
     <message>
@@ -223,7 +223,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+1"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR BITCOINS&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR TERRACOINS&lt;/b&gt;!</source>
         <translation>警告: 如果將錢包加密後忘記密碼, 你會&lt;b&gt;失去其中所有的位元幣&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -250,7 +250,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-56"/>
-        <source>Bitcoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your bitcoins from being stolen by malware infecting your computer.</source>
+        <source>Terracoin will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your terracoins from being stolen by malware infecting your computer.</source>
         <translation>位元幣現在要關閉以完成加密程序. 請記住, 加密錢包無法完全防止入侵電腦的惡意程式偷取你的位元幣.</translation>
     </message>
     <message>
@@ -296,9 +296,9 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
 </context>
 <context>
-    <name>BitcoinGUI</name>
+    <name>TerracoinGUI</name>
     <message>
-        <location filename="../bitcoingui.cpp" line="+257"/>
+        <location filename="../terracoingui.cpp" line="+257"/>
         <source>Sign &amp;message...</source>
         <translation>訊息簽署...</translation>
     </message>
@@ -364,7 +364,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+4"/>
-        <source>Show information about Bitcoin</source>
+        <source>Show information about Terracoin</source>
         <translation>顯示位元幣相關資訊</translation>
     </message>
     <message>
@@ -414,12 +414,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-58"/>
-        <source>Send coins to a Bitcoin address</source>
+        <source>Send coins to a Terracoin address</source>
         <translation>付錢到一個位元幣位址</translation>
     </message>
     <message>
         <location line="+45"/>
-        <source>Modify configuration options for Bitcoin</source>
+        <source>Modify configuration options for Terracoin</source>
         <translation>修改位元幣的設定選項</translation>
     </message>
     <message>
@@ -459,7 +459,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="-186"/>
-        <source>Bitcoin</source>
+        <source>Terracoin</source>
         <translation>位元幣</translation>
     </message>
     <message>
@@ -469,7 +469,7 @@ This product includes software developed by the OpenSSL Project for use in the O
     </message>
     <message>
         <location line="+168"/>
-        <source>&amp;About Bitcoin</source>
+        <source>&amp;About Terracoin</source>
         <translation>關於位元幣</translation>
     </message>
     <message>
@@ -511,12 +511,12 @@ This product includes software developed by the OpenSSL Project for use in the O
     <message>
         <location line="+0"/>
         <location line="+60"/>
-        <source>Bitcoin client</source>
+        <source>Terracoin client</source>
         <translation>位元幣客戶端軟體</translation>
     </message>
     <message numerus="yes">
         <location line="+69"/>
-        <source>%n active connection(s) to Bitcoin network</source>
+        <source>%n active connection(s) to Terracoin network</source>
         <translation><numerusform>與位元幣網路有 %n 個連線在使用中</numerusform></translation>
     </message>
     <message>
@@ -600,7 +600,7 @@ Address: %4
     <message>
         <location line="-15"/>
         <location line="+15"/>
-        <source>URI can not be parsed! This can be caused by an invalid Bitcoin address or malformed URI parameters.</source>
+        <source>URI can not be parsed! This can be caused by an invalid Terracoin address or malformed URI parameters.</source>
         <translation>無法解析 URI! 也許位元幣位址無效或 URI 參數有誤.</translation>
     </message>
     <message>
@@ -634,8 +634,8 @@ Address: %4
         <translation>儲存錢包資料到新的地方時發生錯誤</translation>
     </message>
     <message>
-        <location filename="../bitcoin.cpp" line="+109"/>
-        <source>A fatal error occurred. Bitcoin can no longer continue safely and will quit.</source>
+        <location filename="../terracoin.cpp" line="+109"/>
+        <source>A fatal error occurred. Terracoin can no longer continue safely and will quit.</source>
         <translation>發生了致命的錯誤. 位元幣程式無法再繼續安全執行, 只好結束.</translation>
     </message>
 </context>
@@ -701,7 +701,7 @@ Address: %4
     </message>
     <message>
         <location line="+5"/>
-        <source>The entered address &quot;%1&quot; is not a valid Bitcoin address.</source>
+        <source>The entered address &quot;%1&quot; is not a valid Terracoin address.</source>
         <translation>輸入的位址 &quot;%1&quot; 並不是有效的位元幣位址.</translation>
     </message>
     <message>
@@ -720,7 +720,7 @@ Address: %4
     <message>
         <location filename="../guiutil.cpp" line="+419"/>
         <location line="+12"/>
-        <source>Bitcoin-Qt</source>
+        <source>Terracoin-Qt</source>
         <translation>位元幣-Qt</translation>
     </message>
     <message>
@@ -784,12 +784,12 @@ Address: %4
     </message>
     <message>
         <location line="+31"/>
-        <source>Automatically start Bitcoin after logging in to the system.</source>
+        <source>Automatically start Terracoin after logging in to the system.</source>
         <translation>在登入系統後自動啓動位元幣.</translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start Bitcoin on system login</source>
+        <source>&amp;Start Terracoin on system login</source>
         <translation>系統登入時啟動位元幣</translation>
     </message>
     <message>
@@ -809,8 +809,8 @@ Address: %4
     </message>
     <message>
         <location line="+6"/>
-        <source>Automatically open the Bitcoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>自動在路由器上開啟 Bitcoin 的客戶端通訊埠. 只有在你的路由器支援 UPnP 且開啟時才有作用.</translation>
+        <source>Automatically open the Terracoin client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>自動在路由器上開啟 Terracoin 的客戶端通訊埠. 只有在你的路由器支援 UPnP 且開啟時才有作用.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -819,7 +819,7 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Connect to the Bitcoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
+        <source>Connect to the Terracoin network through a SOCKS proxy (e.g. when connecting through Tor).</source>
         <translation>透過 SOCKS 代理伺服器連線至位元幣網路 (比如說要透過 Tor 連線).</translation>
     </message>
     <message>
@@ -894,7 +894,7 @@ Address: %4
     </message>
     <message>
         <location line="+13"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting Bitcoin.</source>
+        <source>The user interface language can be set here. This setting will take effect after restarting Terracoin.</source>
         <translation>可以在這裡設定使用者介面的語言. 這個設定在位元幣程式重啓後才會生效.</translation>
     </message>
     <message>
@@ -909,7 +909,7 @@ Address: %4
     </message>
     <message>
         <location line="+9"/>
-        <source>Whether to show Bitcoin addresses in the transaction list or not.</source>
+        <source>Whether to show Terracoin addresses in the transaction list or not.</source>
         <translation>是否要在交易列表中顯示位元幣位址.</translation>
     </message>
     <message>
@@ -946,7 +946,7 @@ Address: %4
     <message>
         <location line="-9"/>
         <location line="+9"/>
-        <source>This setting will take effect after restarting Bitcoin.</source>
+        <source>This setting will take effect after restarting Terracoin.</source>
         <translation>這個設定會在位元幣程式重啓後生效.</translation>
     </message>
     <message>
@@ -965,7 +965,7 @@ Address: %4
     <message>
         <location line="+33"/>
         <location line="+183"/>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Bitcoin network after a connection is established, but this process has not completed yet.</source>
+        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the Terracoin network after a connection is established, but this process has not completed yet.</source>
         <translation>顯示的資訊可能是過期的. 與位元幣網路的連線建立後, 你的錢包會自動和網路同步, 但這個步驟還沒完成.</translation>
     </message>
     <message>
@@ -1171,7 +1171,7 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Show the Bitcoin-Qt help message to get a list with possible Bitcoin command-line options.</source>
+        <source>Show the Terracoin-Qt help message to get a list with possible Terracoin command-line options.</source>
         <translation>顯示位元幣-Qt的求助訊息, 來取得可用的命令列選項列表.</translation>
     </message>
     <message>
@@ -1191,12 +1191,12 @@ Address: %4
     </message>
     <message>
         <location line="-104"/>
-        <source>Bitcoin - Debug window</source>
+        <source>Terracoin - Debug window</source>
         <translation>位元幣 - 除錯視窗</translation>
     </message>
     <message>
         <location line="+25"/>
-        <source>Bitcoin Core</source>
+        <source>Terracoin Core</source>
         <translation>位元幣核心</translation>
     </message>
     <message>
@@ -1206,7 +1206,7 @@ Address: %4
     </message>
     <message>
         <location line="+7"/>
-        <source>Open the Bitcoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <source>Open the Terracoin debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation>從目前的資料目錄下開啓位元幣的除錯紀錄檔. 當紀錄檔很大時可能要花好幾秒的時間.</translation>
     </message>
     <message>
@@ -1216,7 +1216,7 @@ Address: %4
     </message>
     <message>
         <location filename="../rpcconsole.cpp" line="-33"/>
-        <source>Welcome to the Bitcoin RPC console.</source>
+        <source>Welcome to the Terracoin RPC console.</source>
         <translation>歡迎使用位元幣 RPC 主控台.</translation>
     </message>
     <message>
@@ -1271,8 +1271,8 @@ Address: %4
     </message>
     <message>
         <location line="+10"/>
-        <source>123.456 BTC</source>
-        <translation>123.456 BTC</translation>
+        <source>123.456 TRC</source>
+        <translation>123.456 TRC</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -1400,7 +1400,7 @@ Address: %4
     </message>
     <message>
         <location filename="../sendcoinsentry.cpp" line="+1"/>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
+        <source>Enter a Terracoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
         <translation>輸入位元幣位址 (比如說 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
 </context>
@@ -1461,7 +1461,7 @@ Address: %4
     </message>
     <message>
         <location line="+21"/>
-        <source>Sign the message to prove you own this Bitcoin address</source>
+        <source>Sign the message to prove you own this Terracoin address</source>
         <translation>簽署一則訊息來證明一個位元幣位址是你的</translation>
     </message>
     <message>
@@ -1493,7 +1493,7 @@ Address: %4
     </message>
     <message>
         <location line="+40"/>
-        <source>Verify the message to ensure it was signed with the specified Bitcoin address</source>
+        <source>Verify the message to ensure it was signed with the specified Terracoin address</source>
         <translation>驗證一則訊息來確認它是用指定的位元幣位址簽署的</translation>
     </message>
     <message>
@@ -1504,7 +1504,7 @@ Address: %4
     <message>
         <location filename="../signverifymessagedialog.cpp" line="+27"/>
         <location line="+3"/>
-        <source>Enter a Bitcoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
+        <source>Enter a Terracoin address (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
         <translation>輸入位元幣位址 (比如說 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</translation>
     </message>
     <message>
@@ -1514,7 +1514,7 @@ Address: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter Bitcoin signature</source>
+        <source>Enter Terracoin signature</source>
         <translation>輸入位元幣簽章</translation>
     </message>
     <message>
@@ -2062,10 +2062,10 @@ Address: %4
     </message>
 </context>
 <context>
-    <name>bitcoin-core</name>
+    <name>terracoin-core</name>
     <message>
-        <location filename="../bitcoinstrings.cpp" line="+71"/>
-        <source>Bitcoin version</source>
+        <location filename="../terracoinstrings.cpp" line="+71"/>
+        <source>Terracoin version</source>
         <translation>位元幣版本</translation>
     </message>
     <message>
@@ -2075,8 +2075,8 @@ Address: %4
     </message>
     <message>
         <location line="-25"/>
-        <source>Send command to -server or bitcoind</source>
-        <translation>送指令至 -server 或 bitcoind
+        <source>Send command to -server or terracoind</source>
+        <translation>送指令至 -server 或 terracoind
 </translation>
     </message>
     <message>
@@ -2099,14 +2099,14 @@ Address: %4
     </message>
     <message>
         <location line="+23"/>
-        <source>Specify configuration file (default: bitcoin.conf)</source>
-        <translation>指定設定檔 (預設: bitcoin.conf)
+        <source>Specify configuration file (default: terracoin.conf)</source>
+        <translation>指定設定檔 (預設: terracoin.conf)
 </translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Specify pid file (default: bitcoind.pid)</source>
-        <translation>指定行程識別碼檔案 (預設: bitcoind.pid)
+        <source>Specify pid file (default: terracoind.pid)</source>
+        <translation>指定行程識別碼檔案 (預設: terracoind.pid)
 </translation>
     </message>
     <message>
@@ -2241,7 +2241,7 @@ Address: %4
     </message>
     <message>
         <location line="+3"/>
-        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Bitcoin will not work properly.</source>
+        <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Terracoin will not work properly.</source>
         <translation>警告: 請檢查電腦時間與日期是否正確! 位元幣無法在時鐘不準的情況下正常運作.</translation>
     </message>
     <message>
@@ -2306,8 +2306,8 @@ Address: %4
     </message>
     <message>
         <location line="+4"/>
-        <source>SSL options: (see the Bitcoin Wiki for SSL setup instructions)</source>
-        <translation>SSL 選項: (SSL 設定程序請見 Bitcoin Wiki)</translation>
+        <source>SSL options: (see the Terracoin Wiki for SSL setup instructions)</source>
+        <translation>SSL 選項: (SSL 設定程序請見 Terracoin Wiki)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2458,12 +2458,12 @@ Address: %4
     </message>
     <message>
         <location line="-120"/>
-        <source>Cannot obtain a lock on data directory %s.  Bitcoin is probably already running.</source>
+        <source>Cannot obtain a lock on data directory %s.  Terracoin is probably already running.</source>
         <translation>無法鎖定資料目錄 %s. 也許位元幣已經在執行了.</translation>
     </message>
     <message>
         <location line="+46"/>
-        <source>Bitcoin</source>
+        <source>Terracoin</source>
         <translation>位元幣</translation>
     </message>
     <message>
@@ -2498,12 +2498,12 @@ Address: %4
     </message>
     <message>
         <location line="+1"/>
-        <source>Error loading wallet.dat: Wallet requires newer version of Bitcoin</source>
-        <translation>載入檔案 wallet.dat 失敗: 此錢包需要新版的 Bitcoin</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Terracoin</source>
+        <translation>載入檔案 wallet.dat 失敗: 此錢包需要新版的 Terracoin</translation>
     </message>
     <message>
         <location line="+72"/>
-        <source>Wallet needed to be rewritten: restart Bitcoin to complete</source>
+        <source>Wallet needed to be rewritten: restart Terracoin to complete</source>
         <translation>錢包需要重寫: 請重啟位元幣來完成</translation>
     </message>
     <message>
@@ -2593,7 +2593,7 @@ Address: %4
     </message>
     <message>
         <location line="-18"/>
-        <source>Unable to bind to %s on this computer. Bitcoin is probably already running.</source>
+        <source>Unable to bind to %s on this computer. Terracoin is probably already running.</source>
         <translation>無法和這台電腦上的 %s 繫結. 也許位元幣已經在執行了.</translation>
     </message>
     <message>
@@ -2646,7 +2646,7 @@ Address: %4
         <source>%s, you must set a rpcpassword in the configuration file:
  %s
 It is recommended you use the following random password:
-rpcuser=bitcoinrpc
+rpcuser=terracoinrpc
 rpcpassword=%s
 (you do not need to remember this password)
 If the file does not exist, create it with owner-readable-only file permissions.
@@ -2654,7 +2654,7 @@ If the file does not exist, create it with owner-readable-only file permissions.
         <translation>%s, 你必須在下列設定檔中設定 RPC 密碼(rpcpassword):
 %s
 建議你使用下列的隨機產生密碼:
-rpcuser=bitcoinrpc
+rpcuser=terracoinrpc
 rpcpassword=%s
 (你不用記住這個密碼)
 如果這個檔案還不存在, 請在新增時, 設定檔案權限為&quot;只有主人才能讀取&quot;.
