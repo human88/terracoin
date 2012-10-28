@@ -162,7 +162,7 @@ void InitOnce(OnceType* once, void (*initializer)()) {
 
   assert(Uninitialized == LEVELDB_ONCE_INIT);
 
-  InitializationState state = static_cast<InitializationState>(InterlockedCompareExchange(once, Running, Uninitialized));
+  InitializationState state = static_cast<InitializationState>(InterlockedCompareExchange((long *) once, Running, Uninitialized));
 
   if (state == Uninitialized) {
       initializer();
