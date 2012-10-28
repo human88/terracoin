@@ -7,9 +7,6 @@ sudo apt-get install gcc-mingw32 mingw32-binutils mingw32-runtime
 
 mkdir -p ~/lib/i586-mingw32msvc ~/downloads/terracoin/i586-mingw32msvc
 
-# edit terracoin/src/makefile.linux-mingw to change MINGW_EXTRALIBS_DIR
-# (make it point to ~/lib/i586-mingw32msvc )
-
 
 # Thirdparty libraries #
 
