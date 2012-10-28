@@ -2,30 +2,32 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-DEPSDIR:=/usr/i586-mingw32msvc
+MINGW_DIR:=/usr/i586-mingw32msvc
+MINGW_EXTRALIBS_DIR:=/home/terra/lib/i586-mingw32msvc
 
-USE_UPNP:=0
-USE_IPV6:=1
+USE_UPNP:=-
+USE_IPV6:=-
 
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
  -I"$(CURDIR)"/obj \
- -I"$(DEPSDIR)/boost_1_50_0" \
- -I"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
- -I"$(DEPSDIR)/openssl-1.0.1c/include" \
- -I"$(DEPSDIR)"
+ -I"$(MINGW_EXTRALIBS_DIR)/boost_1_50_0" \
+ -I"$(MINGW_EXTRALIBS_DIR)/db-4.8.30.NC/build_unix" \
+ -I"$(MINGW_EXTRALIBS_DIR)/openssl-1.0.1c/include" \
+ -I"$(MINGW_DIR)/include"
 
 LIBPATHS= \
- -L"$(DEPSDIR)/boost_1_50_0/stage/lib" \
- -L"$(DEPSDIR)/db-4.8.30.NC/build_unix" \
- -L"$(DEPSDIR)/openssl-1.0.1c"
+ -L"$(MINGW_EXTRALIBS_DIR)/boost_1_50_0/stage/lib" \
+ -L"$(MINGW_EXTRALIBS_DIR)/db-4.8.30.NC/build_unix" \
+ -L"$(MINGW_EXTRALIBS_DIR)/openssl-1.0.1c" \
+ -L"$(MINGW_DIR)/lib"
 
 LIBS= \
- -l boost_system-mt-s \
- -l boost_filesystem-mt-s \
- -l boost_program_options-mt-s \
- -l boost_thread_win32-mt-s \
- -l boost_chrono-mt-s \
+ -l boost_system-mt \
+ -l boost_filesystem-mt \
+ -l boost_program_options-mt \
+ -l boost_thread_win32-mt \
+ -l boost_chrono-mt \
  -l db_cxx \
  -l ssl \
  -l crypto
@@ -41,7 +43,7 @@ ifndef USE_UPNP
 	override USE_UPNP = -
 endif
 ifneq (${USE_UPNP}, -)
-	LIBPATHS += -L"$(DEPSDIR)/miniupnpc"
+	LIBPATHS += -L"$(MINGW_EXTRALIBS_DIR)/miniupnpc"
 	LIBS += -l miniupnpc -l iphlpapi
 	DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
 endif
