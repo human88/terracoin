@@ -3,7 +3,7 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 MINGW_DIR:=/usr/i586-mingw32msvc
-MINGW_EXTRALIBS_DIR:=/home/terra/lib/i586-mingw32msvc
+MINGW_EXTRALIBS_DIR:=$(HOME)/lib/i586-mingw32msvc
 
 USE_UPNP:=-
 USE_IPV6:=-
