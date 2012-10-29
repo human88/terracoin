@@ -1,9 +1,10 @@
 #!/bin/sh
 #
 # initial setup ; have to be done once.
+# recommended distribution: ubuntu
 #
 
-sudo apt-get install apt-cacher python-vm-builder
+sudo apt-get install ruby apache2 git apt-cacher-ng python-vm-builder qemu-kvm
 
 mkdir ~/build-terracoin
 cd ~/build-terracoin
