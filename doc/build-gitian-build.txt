@@ -1,0 +1,31 @@
+#
+# building releases
+#
+
+cd ~/build-terracoin
+cd terracoin
+git pull
+cd ../gitian-builder
+git pull
+
+# build linux releases:
+./bin/gbuild --commit terracoin=e7ef803baff0519f3cb34b8b7333bb4c1fbb69cd ../terracoin/contrib/gitian-descriptors/gitian.yml
+
+# Build Win32 dependencies: (only needs to be done once, or when dependency versions change)
+./bin/gbuild --commit terracoin=HEAD ../terracoin/contrib/gitian-descriptors/boost-win32.yml
+./bin/gbuild --commit terracoin=HEAD ../terracoin/contrib/gitian-descriptors/deps-win32.yml
+./bin/gbuild --commit terracoin=HEAD ../terracoin/contrib/gitian-descriptors/qt-win32.yml
+
+# Build Win32 release:
+./bin/gbuild --commit terracoin=HEAD ../terracoin/contrib/gitian-descriptors/gitian-win32.yml
+
+# fetch built releases:
+PATH="libexec:$PATH"
+start-target 32 lucid-i386
+copy-from-target out /tmp/terracoin-0.1.1-linux-32
+stop-target
+start-target 64 lucid-amd64
+copy-from-target out /tmp/terracoin-0.1.1-linux-64
+stop-target
+
+
