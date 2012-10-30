@@ -2,9 +2,10 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-MINGW_DIR:=/usr/i586-mingw32msvc
-#MINGW_EXTRALIBS_DIR:=$(HOME)/lib/i586-mingw32msvc
-MINGW_EXTRALIBS_DIR:=/home/terracoin/dependencies
+MINGW_DIR=/usr/i586-mingw32msvc
+ifndef MINGW_EXTRALIBS_DIR
+MINGW_EXTRALIBS_DIR=$(HOME)/lib/i586-mingw32msvc
+endif
 
 USE_UPNP:=-
 USE_IPV6:=-

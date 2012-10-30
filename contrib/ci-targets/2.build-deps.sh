@@ -114,8 +114,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
             cd ${WORKSPACE}/src/leveldb/ || exit_error "Failed to change to src/leveldb/"
             PATH=/usr/i586-mingw32msvc/bin/:$PATH TARGET_OS="OS_WINDOWS_CROSSCOMPILE" CXX=i586-mingw32msvc-c++ CC=i586-mingw32msvc-cc LD=i586-mingw32msvc-ld OPT="-I${platform_src_dir}/boost_1_50_0" make libmemenv.a libleveldb.a || exit_error "Failed to build leveldb"
             cd ${WORKSPACE}/src/ || exit_error "Failed to change to src/"
-
-            sed -i "s/^MINGW_EXTRALIBS_DIR:=(.*)$/MINGW_EXTRALIBS_DIR:=${platform_src_dir}/" makefile.linux-mingw
+            export MINGW_EXTRALIBS_DIR=${platform_src_dir}
             make -f makefile.linux-mingw || exit_error "make failed"
             /usr/i586-mingw32msvc/bin/strip terracoind.exe || exit_error "strip failed"
             [ -f ${WORKSPACE}/src/terracoind.exe ] || exit_error "UNABLE to find generated terracoind.exe"
