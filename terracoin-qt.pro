@@ -55,13 +55,8 @@ contains(USE_QRCODE, 1) {
 #  or: qmake "USE_UPNP=0" (disabled by default)
 #  or: qmake "USE_UPNP=-" (not supported)
 # miniupnpc (http://miniupnp.free.fr/files/) must be installed for support
-contains(USE_UPNP, -) {
-    message(Building without UPNP support)
-} else {
+contains(USE_UPNP, 1) {
     message(Building with UPNP support)
-    count(USE_UPNP, 0) {
-        USE_UPNP=1
-    }
     DEFINES += USE_UPNP=$$USE_UPNP STATICLIB
     INCLUDEPATH += $$MINIUPNPC_INCLUDE_PATH
     LIBS += $$join(MINIUPNPC_LIB_PATH,,-L,) -lminiupnpc
@@ -88,6 +83,7 @@ contains(USE_IPV6, -) {
 }
 
 contains(TERRACOIN_NEED_QT_PLUGINS, 1) {
+    message(including QTPLUGIN)
     DEFINES += TERRACOIN_NEED_QT_PLUGINS
     QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs qtaccessiblewidgets
 }
@@ -95,13 +91,13 @@ contains(TERRACOIN_NEED_QT_PLUGINS, 1) {
 INCLUDEPATH += src/leveldb/include src/leveldb/helpers
 LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
 !windows {
-    genleveldb.commands = cd $$PWD/src/leveldb ; $(MAKE) libleveldb.a libmemenv.a
+    genleveldb.commands = cd $$PWD/src/leveldb && $(MAKE) libleveldb.a libmemenv.a
 } else {
     # make an educated guess about what the ranlib command is called
     isEmpty(QMAKE_RANLIB) {
         QMAKE_RANLIB = $$replace(QMAKE_STRIP, strip, ranlib)
     }
-    genleveldb.commands = cd $$PWD/src/leveldb ; CC=$$QMAKE_CC CXX=$$QMAKE_CXX TARGET_OS=OS_WINDOWS_CROSSCOMPILE CXXFLAGS="-I$$BOOST_INCLUDE_PATH" LDFLAGS="-L$$BOOST_LIB_PATH" $(MAKE) libleveldb.a libmemenv.a ; $$QMAKE_RANLIB $$PWD/src/leveldb/libleveldb.a ; $$QMAKE_RANLIB $$PWD/src/leveldb/libmemenv.a
+    genleveldb.commands = cd $$PWD/src/leveldb && CC=$$QMAKE_CC CXX=$$QMAKE_CXX TARGET_OS=OS_WINDOWS_CROSSCOMPILE CXXFLAGS="-I$$BOOST_INCLUDE_PATH" LDFLAGS="-L$$BOOST_LIB_PATH" $(MAKE) libleveldb.a libmemenv.a && $$QMAKE_RANLIB $$PWD/src/leveldb/libleveldb.a && $$QMAKE_RANLIB $$PWD/src/leveldb/libmemenv.a
 }
 genleveldb.target = $$PWD/src/leveldb/libleveldb.a
 genleveldb.depends = FORCE

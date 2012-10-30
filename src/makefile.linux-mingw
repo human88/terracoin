@@ -2,8 +2,10 @@
 # Distributed under the MIT/X11 software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-MINGW_DIR:=/usr/i586-mingw32msvc
-MINGW_EXTRALIBS_DIR:=$(HOME)/lib/i586-mingw32msvc
+MINGW_DIR=/usr/i586-mingw32msvc
+ifndef MINGW_EXTRALIBS_DIR
+MINGW_EXTRALIBS_DIR=$(HOME)/lib/i586-mingw32msvc
+endif
 
 USE_UPNP:=-
 USE_IPV6:=-
@@ -94,7 +96,7 @@ LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
 DEFS += -I"$(CURDIR)/leveldb/include"
 DEFS += -I"$(CURDIR)/leveldb/helpers"
 leveldb/libleveldb.a:
-	@echo "Building LevelDB ..."; cd leveldb; TARGET_OS=OS_WINDOWS_CROSSCOMPILE CXXFLAGS="-I$(INCLUDEPATHS)" LDFLAGS="-L$(LIBPATHS)" make libleveldb.a libmemenv.a; cd ..
+	@echo "Building LevelDB ..." && cd leveldb && CC=i586-mingw32msvc-gcc CXX=i586-mingw32msvc-g++ TARGET_OS=OS_WINDOWS_CROSSCOMPILE CXXFLAGS="-I$(INCLUDEPATHS)" LDFLAGS="-L$(LIBPATHS)" make libleveldb.a libmemenv.a && i586-mingw32msvc-ranlib libleveldb.a && i586-mingw32msvc-ranlib libmemenv.a && cd ..
 obj/leveldb.o: leveldb/libleveldb.a
 
 obj/build.h: FORCE
