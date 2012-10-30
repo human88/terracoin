@@ -7,7 +7,7 @@ for building terracoin binaries for linux and windows 32+64 bits platforms under
 
 we use debian machines for our builders, but any linux distribution may be used.
 
-apt-get install gcc-mingw32 mingw32-binutils mingw32-runtime mingw-w64 gcc
+apt-get install gcc-mingw32 mingw32-binutils mingw32-runtime mingw-w64 gcc g++
 
 
 ## Scripts ##
