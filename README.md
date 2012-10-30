@@ -10,17 +10,17 @@ terracoin development team members simply pulls it.
 Official Bitcoin patches are also regurlarly merged into Terracoin.
 
 Newly developped features and additions are submitted to **dev-x.y.z** branch,
-"x", "y" and "z" (respectively major, minor an build) matches a given Terracoin
+"x", "y" and "z" (respectively major, minor an build) matching a given Terracoin
 milestone at github project page.
 
 When an upcoming milestone is about to be released, code from given "dev-x.y.z"
 branch is merged into corresponding "release-x.y.z" branch, for testing.
 
-Upon validation, "release-x.y.z" branch is merged into "master" branch, and a
-new tag is created.
+Upon validation, "release-x.y.z" branch is merged into "master" branch,
+tested again, and a new tag is created.
 
 Feature branches ("feature-shortname") may eventually be created when two
-or more developpers works on a common feature.
+or more developpers works on the same task.
 
 
 # Build status #
