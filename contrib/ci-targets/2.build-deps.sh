@@ -6,14 +6,15 @@
 # (for a list of valid platforms, see 1.env-setup.sh)
 #
 
+RELEASE_VERSION="0.0.1"
 SOURCE_DESTDIR=/home/terracoin/dependencies
+RELEASE_PUBLISH_DIR=/home/terracoin/releases
 TARGET_PLATFORMS=("mingw32")
 
 exit_error() {
     echo $1;
     exit 1;
 }
-
 
 for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
     if [ -z ${CUR_PLATFORM} ]; then
@@ -164,6 +165,21 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
             [ -f ${WORKSPACE}/src/terracoind.exe ] || exit_error "UNABLE to find generated terracoind.exe"
             echo "terracoind compile success."
 
+            # copy built files if built branch is 'master':
+            if [ "${GIT_BRANCH}" == "master" ]; then
+                release_out_dir=${RELEASE_PUBLISH_DIR}/${CUR_PLATFORM}
+                [ -d ${release_out_dir} ] || mkdir -p ${release_out_dir}
+                if [ ! -d ${release_out_dir} ]; then
+                    echo "UNABLE to create release_out_dir="${release_out_dir}
+                else
+                    /bin/cp -f ${WORKSPACE}/src/terracoind.exe ${release_out_dir}/ || exit_error "FAILED to copy terracoind.exe"
+                    /bin/cp -f ${WORKSPACE}/release/terracoin-qt.exe ${release_out_dir}/ || exit_error "FAILED to copy terracoin-qt.exe"
+                    /bin/cp ${WORKSPACE}/{INSTALL,COPYING,README.md} ${release_out_dir}/ || exit_error "FAILED to copy text files"
+                    cd ${release_out_dir}/
+                    /usr/bin/zip -v -9 terracoin-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip * || exit_error "FAILED to create zip archive."
+                    echo "ZIP archive created."
+                fi
+            fi
 
 
         ;;
