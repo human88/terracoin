@@ -1,3 +1,8 @@
+# Links #
+
+* http://www.terracoin.org/ - project main website
+* http://sourceforge.net/projects/terracoin/ - sf mirror hosting files, code and soon discussion forum & eventually mailing lists.
+
 
 # Development process #
 
@@ -22,12 +27,4 @@ tested again, and a new tag is created.
 Feature branches ("feature-shortname") may eventually be created when two
 or more developpers works on the same task.
 
-
-# Build status #
-
-master branch: [![Build Status](http://ci.terracoin.org/job/terracoin-master/badge/icon)](http://ci.terracoin.org/job/terracoin-master/)
-
-release branch: [![Build Status](http://ci.terracoin.org/job/terracoin-release/badge/icon)](http://ci.terracoin.org/job/terracoin-release/)
-
-dev branch: [![Build Status](http://ci.terracoin.org/job/terracoin-dev/badge/icon)](http://ci.terracoin.org/job/terracoin-dev/)
 
