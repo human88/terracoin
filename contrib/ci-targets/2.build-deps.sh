@@ -166,7 +166,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
             echo "terracoind compile success."
 
             # copy built files if built branch is 'master':
-            if [ "${GIT_BRANCH}" == "master" ]; then
+            #if [ "${GIT_BRANCH}" == "master" ]; then
                 release_out_dir=${RELEASE_PUBLISH_DIR}/${CUR_PLATFORM}
                 [ -d ${release_out_dir} ] || mkdir -p ${release_out_dir}
                 if [ ! -d ${release_out_dir} ]; then
@@ -179,7 +179,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
                     /usr/bin/zip -v -9 terracoin-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip * || exit_error "FAILED to create zip archive."
                     echo "ZIP archive created."
                 fi
-            fi
+            #fi
 
 
         ;;
