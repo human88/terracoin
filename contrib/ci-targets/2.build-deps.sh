@@ -149,7 +149,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
             echo "Building terracoin qt client..."
             cd ${WORKSPACE} || exit_error "Failed to change to workspace dir"
             make distclean
-            PATH=${platform_src_dir}/qt/bin:$PATH ${platform_src_dir}/qt/bin/qmake -spec unsupported/win32-g++-cross MINIUPNPC_LIB_PATH=${platform_src_dir}/miniupnpc-1.6 MINIUPNPC_INCLUDE_PATH=${platform_src_dir} BDB_LIB_PATH=${platform_src_dir}/db-4.8.30.NC/build_unix BDB_INCLUDE_PATH=${platform_src_dir}/db-4.8.30.NC/build_unix BOOST_LIB_PATH=${platform_src_dir}/boost_1_50_0/stage/lib BOOST_INCLUDE_PATH=${platform_src_dir}/boost_1_50_0 BOOST_LIB_SUFFIX=-mt BOOST_THREAD_LIB_SUFFIX=_win32-mt OPENSSL_LIB_PATH=${platform_src_dir}/openssl-1.0.1c OPENSSL_INCLUDE_PATH=${platform_src_dir}/openssl-1.0.1c/include QRENCODE_LIB_PATH=${platform_src_dir}/qrencode-3.2.0/.libs QRENCODE_INCLUDE_PATH=${platform_src_dir}/qrencode-3.2.0 USE_QRCODE=0 INCLUDEPATH=${platform_src_dir} DEFINES=BOOST_THREAD_USE_LIB QMAKE_LRELEASE=lrelease QMAKE_CXXFLAGS=-frandom-seed=terracoin QMAKE_LFLAGS=-frandom-seed=terracoin USE_BUILD_INFO=1 TERRACOIN_NEED_QT_PLUGINS=1 || exit_error "qmake failed"
+            PATH=${platform_src_dir}/qt/bin:$PATH ${platform_src_dir}/qt/bin/qmake -spec unsupported/win32-g++-cross MINIUPNPC_LIB_PATH=${platform_src_dir}/miniupnpc-1.6 MINIUPNPC_INCLUDE_PATH=${platform_src_dir} BDB_LIB_PATH=${platform_src_dir}/db-4.8.30.NC/build_unix BDB_INCLUDE_PATH=${platform_src_dir}/db-4.8.30.NC/build_unix BOOST_LIB_PATH=${platform_src_dir}/boost_1_50_0/stage/lib BOOST_INCLUDE_PATH=${platform_src_dir}/boost_1_50_0 BOOST_LIB_SUFFIX=-mt BOOST_THREAD_LIB_SUFFIX=_win32-mt OPENSSL_LIB_PATH=${platform_src_dir}/openssl-1.0.1c OPENSSL_INCLUDE_PATH=${platform_src_dir}/openssl-1.0.1c/include QRENCODE_LIB_PATH=${platform_src_dir}/qrencode-3.2.0/.libs QRENCODE_INCLUDE_PATH=${platform_src_dir}/qrencode-3.2.0 USE_UPNP=1 USE_QRCODE=0 INCLUDEPATH=${platform_src_dir} DEFINES=BOOST_THREAD_USE_LIB QMAKE_LRELEASE=lrelease QMAKE_CXXFLAGS=-frandom-seed=terracoin QMAKE_LFLAGS=-frandom-seed=terracoin USE_BUILD_INFO=1 TERRACOIN_NEED_QT_PLUGINS=1 || exit_error "qmake failed"
             PATH=${platform_src_dir}/qt/bin:$PATH make || exit_error "Make failed"
 
             # terracoin headless daemon:
@@ -166,7 +166,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
             echo "terracoind compile success."
 
             # copy built files if built branch is 'master':
-            if [ "${GIT_BRANCH}" == "master" ]; then
+            #if [ "${GIT_BRANCH}" == "master" ]; then
                 release_out_dir=${RELEASE_PUBLISH_DIR}/${CUR_PLATFORM}
                 [ -d ${release_out_dir} ] || mkdir -p ${release_out_dir}
                 if [ ! -d ${release_out_dir} ]; then
@@ -179,7 +179,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
                     /usr/bin/zip -v -9 terracoin-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip * || exit_error "FAILED to create zip archive."
                     echo "ZIP archive created."
                 fi
-            fi
+            #fi
 
 
         ;;
