@@ -31,8 +31,6 @@ public:
         DetachDatabases,   // bool
         Language,          // QString
         SaveWindowPositionSize, // bool
-        WindowPosX,        // int
-        WindowPosY,         // int
         OptionIDRowCount,
     };
 
