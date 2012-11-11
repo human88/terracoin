@@ -30,6 +30,9 @@ public:
         DisplayAddresses,  // bool
         DetachDatabases,   // bool
         Language,          // QString
+        SaveWindowPositionSize, // bool
+        WindowPosX,        // int
+        WindowPosY,         // int
         OptionIDRowCount,
     };
 
@@ -46,6 +49,7 @@ public:
     qint64 getTransactionFee();
     bool getMinimizeToTray() { return fMinimizeToTray; }
     bool getMinimizeOnClose() { return fMinimizeOnClose; }
+    bool getSaveWindowPositionSize() { return fSaveWindowPositionSize; }
     int getDisplayUnit() { return nDisplayUnit; }
     bool getDisplayAddresses() { return bDisplayAddresses; }
     QString getLanguage() { return language; }
@@ -55,6 +59,7 @@ private:
     bool bDisplayAddresses;
     bool fMinimizeToTray;
     bool fMinimizeOnClose;
+    bool fSaveWindowPositionSize;
     QString language;
 
 signals:

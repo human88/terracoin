@@ -45,6 +45,7 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QProgressBar>
+#include <QSettings>
 #include <QStackedWidget>
 #include <QDateTime>
 #include <QMovie>
@@ -68,7 +69,14 @@ BitcoinGUI::BitcoinGUI(QWidget *parent):
     notificator(0),
     rpcConsole(0)
 {
-    resize(850, 550);
+    QSettings settings;
+    if (settings.value("fSaveWindowPositionSize", false).toBool()) {
+        resize(settings.value("mainWindowXSize", 850).toInt(), settings.value("mainWindowYSize", 550).toInt());
+        move(settings.value("mainWindowX", 320).toInt(), settings.value("mainWindowY", 240).toInt());
+    } else {
+        resize(850, 550);
+    }
+
     setWindowTitle(tr("Terracoin") + " - " + tr("Wallet"));
 #ifndef Q_OS_MAC
     qApp->setWindowIcon(QIcon(":icons/bitcoin"));
@@ -274,7 +282,7 @@ void BitcoinGUI::createActions()
     openRPCConsoleAction = new QAction(QIcon(":/icons/debugwindow"), tr("&Debug window"), this);
     openRPCConsoleAction->setStatusTip(tr("Open debugging and diagnostic console"));
 
-    connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+    connect(quitAction, SIGNAL(triggered()), this, SLOT(quit()));
     connect(aboutAction, SIGNAL(triggered()), this, SLOT(aboutClicked()));
     connect(aboutQtAction, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
     connect(optionsAction, SIGNAL(triggered()), this, SLOT(optionsClicked()));
@@ -616,6 +624,7 @@ void BitcoinGUI::closeEvent(QCloseEvent *event)
         if(!clientModel->getOptionsModel()->getMinimizeToTray() &&
            !clientModel->getOptionsModel()->getMinimizeOnClose())
         {
+            storeWindowPosSize();
             qApp->quit();
         }
 #endif
@@ -888,3 +897,27 @@ void BitcoinGUI::toggleHidden()
 {
     showNormalIfMinimized(true);
 }
+
+void BitcoinGUI::storeWindowPosSize() {
+        QSettings settings;
+        int x = pos().x();
+        int y = pos().y();
+
+        printf("BitcoinGUI::quit() saving window position.\n");
+        settings.setValue("mainWindowX", x);
+        settings.setValue("mainWindowY", y);
+
+        x = size().width();
+        y = size().height();
+        settings.setValue("mainWindowXSize", x);
+        settings.setValue("mainWindowYSize", y);
+}
+
+void BitcoinGUI::quit() {
+    if (clientModel->getOptionsModel()->getSaveWindowPositionSize()) {
+        storeWindowPosSize();
+    }
+
+    qApp->quit();
+}
+

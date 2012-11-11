@@ -45,6 +45,7 @@ void OptionsModel::Init()
     bDisplayAddresses = settings.value("bDisplayAddresses", false).toBool();
     fMinimizeToTray = settings.value("fMinimizeToTray", false).toBool();
     fMinimizeOnClose = settings.value("fMinimizeOnClose", false).toBool();
+    fSaveWindowPositionSize = settings.value("fSaveWindowPositionSize", false).toBool();
     nTransactionFee = settings.value("nTransactionFee").toLongLong();
     language = settings.value("language", "").toString();
 
@@ -86,7 +87,7 @@ bool OptionsModel::Upgrade()
         }
     }
     QList<QString> boolOptions;
-    boolOptions << "bDisplayAddresses" << "fMinimizeToTray" << "fMinimizeOnClose" << "fUseProxy" << "fUseUPnP";
+    boolOptions << "bDisplayAddresses" << "fMinimizeToTray" << "fMinimizeOnClose" << "fUseProxy" << "fUseUPnP" << "fSaveWindowPositionSize";
     foreach(QString key, boolOptions)
     {
         bool value = false;
@@ -142,6 +143,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return settings.value("fUseUPnP", GetBoolArg("-upnp", true));
         case MinimizeOnClose:
             return QVariant(fMinimizeOnClose);
+        case SaveWindowPositionSize:
+            return QVariant(fSaveWindowPositionSize);
         case ProxyUse: {
             proxyType proxy;
             return QVariant(GetProxy(NET_IPV4, proxy));
@@ -207,6 +210,10 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case MinimizeOnClose:
             fMinimizeOnClose = value.toBool();
             settings.setValue("fMinimizeOnClose", fMinimizeOnClose);
+            break;
+        case SaveWindowPositionSize:
+            fSaveWindowPositionSize = value.toBool();
+            settings.setValue("fSaveWindowPositionSize", fSaveWindowPositionSize);
             break;
         case ProxyUse:
             settings.setValue("fUseProxy", value.toBool());

@@ -266,6 +266,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QCheckBox" name="saveWindowPositionSize">
+         <property name="toolTip">
+          <string>Restore main window position and size on startup.</string>
+         </property>
+         <property name="text">
+          <string>R&amp;estore window size and position on startup.</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_Window">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
