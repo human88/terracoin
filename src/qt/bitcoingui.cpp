@@ -272,9 +272,9 @@ void BitcoinGUI::createActions()
     changePassphraseAction = new QAction(QIcon(":/icons/key"), tr("&Change Passphrase..."), this);
     changePassphraseAction->setStatusTip(tr("Change the passphrase used for wallet encryption"));
     signMessageAction = new QAction(QIcon(":/icons/edit"), tr("Sign &message..."), this);
-    signMessageAction->setStatusTip(tr("Sign messages with your Bitcoin addresses to prove you own them"));
+    signMessageAction->setStatusTip(tr("Sign messages with your Terracoin addresses to prove you own them"));
     verifyMessageAction = new QAction(QIcon(":/icons/transaction_0"), tr("&Verify message..."), this);
-    verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Bitcoin addresses"));
+    verifyMessageAction->setStatusTip(tr("Verify messages to ensure they were signed with specified Terracoin addresses"));
 
     exportAction = new QAction(QIcon(":/icons/export"), tr("&Export..."), this);
     exportAction->setStatusTip(tr("Export the data in the current tab to a file"));
@@ -497,7 +497,8 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
     statusBar()->clearMessage();
 
     // don't show / hide progress bar and its label if we have no connection to the network
-    if (!clientModel || (clientModel->getNumConnections() == 0 && !clientModel->isImporting()))
+    enum BlockSource blockSource = clientModel ? clientModel->getBlockSource() : BLOCK_SOURCE_NONE;
+    if (blockSource == BLOCK_SOURCE_NONE || (blockSource == BLOCK_SOURCE_NETWORK && clientModel->getNumConnections() == 0))
     {
         progressBarLabel->setVisible(false);
         progressBar->setVisible(false);
@@ -507,26 +508,39 @@ void BitcoinGUI::setNumBlocks(int count, int nTotalBlocks)
 
     QString tooltip;
 
+    QString importText;
+    switch (blockSource) {
+    case BLOCK_SOURCE_NONE:
+    case BLOCK_SOURCE_NETWORK:
+        importText = tr("Synchronizing with network...");
+        break;
+    case BLOCK_SOURCE_DISK:
+        importText = tr("Importing blocks from disk...");
+        break;
+    case BLOCK_SOURCE_REINDEX:
+        importText = tr("Reindexing blocks on disk...");
+    }
+
     if(count < nTotalBlocks)
     {
         int nRemainingBlocks = nTotalBlocks - count;
         float nPercentageDone = count / (nTotalBlocks * 0.01f);
 
-        progressBarLabel->setText(tr(clientModel->isImporting() ? "Importing blocks..." : "Synchronizing with network..."));
+        progressBarLabel->setText(importText);
         progressBarLabel->setVisible(true);
         progressBar->setFormat(tr("~%n block(s) remaining", "", nRemainingBlocks));
         progressBar->setMaximum(nTotalBlocks);
         progressBar->setValue(count);
         progressBar->setVisible(true);
 
-        tooltip = tr("Downloaded %1 of %2 blocks of transaction history (%3% done).").arg(count).arg(nTotalBlocks).arg(nPercentageDone, 0, 'f', 2);
+        tooltip = tr("Processed %1 of %2 blocks of transaction history (%3% done).").arg(count).arg(nTotalBlocks).arg(nPercentageDone, 0, 'f', 2);
     }
     else
     {
         progressBarLabel->setVisible(false);
 
         progressBar->setVisible(false);
-        tooltip = tr("Downloaded %1 blocks of transaction history.").arg(count);
+        tooltip = tr("Processed %1 blocks of transaction history.").arg(count);
     }
 
     QDateTime lastBlockDate = clientModel->getLastBlockDate();
@@ -634,11 +648,9 @@ void BitcoinGUI::closeEvent(QCloseEvent *event)
 
 void BitcoinGUI::askFee(qint64 nFeeRequired, bool *payFee)
 {
-    QString strMessage =
-        tr("This transaction is over the size limit.  You can still send it for a fee of %1, "
-          "which goes to the nodes that process your transaction and helps to support the network.  "
-          "Do you want to pay the fee?").arg(
-                BitcoinUnits::formatWithUnit(BitcoinUnits::TRC, nFeeRequired));
+    QString strMessage = tr("This transaction is over the size limit. You can still send it for a fee of %1, "
+        "which goes to the nodes that process your transaction and helps to support the network. "
+        "Do you want to pay the fee?").arg(BitcoinUnits::formatWithUnit(BitcoinUnits::TRC, nFeeRequired));
     QMessageBox::StandardButton retval = QMessageBox::question(
           this, tr("Confirm transaction fee"), strMessage,
           QMessageBox::Yes|QMessageBox::Cancel, QMessageBox::Yes);
