@@ -87,16 +87,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QCheckBox" name="detachDatabases">
-         <property name="toolTip">
-          <string>Detach block and address databases at shutdown. This means they can be moved to another data directory, but it slows down shutdown. The wallet is always detached.</string>
-         </property>
-         <property name="text">
-          <string>&amp;Detach databases at shutdown</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <spacer name="verticalSpacer_Main">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -262,6 +252,16 @@
          </property>
          <property name="text">
           <string>M&amp;inimize on close</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="saveWindowPositionSize">
+         <property name="toolTip">
+          <string>Restore main window position and size on startup.</string>
+         </property>
+         <property name="text">
+          <string>R&amp;estore window size and position on startup.</string>
          </property>
         </widget>
        </item>

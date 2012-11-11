@@ -28,8 +28,8 @@ public:
         Fee,               // qint64
         DisplayUnit,       // BitcoinUnits::Unit
         DisplayAddresses,  // bool
-        DetachDatabases,   // bool
         Language,          // QString
+        SaveWindowPositionSize, // bool
         OptionIDRowCount,
     };
 
@@ -46,6 +46,7 @@ public:
     qint64 getTransactionFee();
     bool getMinimizeToTray() { return fMinimizeToTray; }
     bool getMinimizeOnClose() { return fMinimizeOnClose; }
+    bool getSaveWindowPositionSize() { return fSaveWindowPositionSize; }
     int getDisplayUnit() { return nDisplayUnit; }
     bool getDisplayAddresses() { return bDisplayAddresses; }
     QString getLanguage() { return language; }
@@ -55,6 +56,7 @@ private:
     bool bDisplayAddresses;
     bool fMinimizeToTray;
     bool fMinimizeOnClose;
+    bool fSaveWindowPositionSize;
     QString language;
 
 signals:

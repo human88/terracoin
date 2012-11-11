@@ -45,6 +45,7 @@ void OptionsModel::Init()
     bDisplayAddresses = settings.value("bDisplayAddresses", false).toBool();
     fMinimizeToTray = settings.value("fMinimizeToTray", false).toBool();
     fMinimizeOnClose = settings.value("fMinimizeOnClose", false).toBool();
+    fSaveWindowPositionSize = settings.value("fSaveWindowPositionSize", false).toBool();
     nTransactionFee = settings.value("nTransactionFee").toLongLong();
     language = settings.value("language", "").toString();
 
@@ -56,8 +57,6 @@ void OptionsModel::Init()
         SoftSetArg("-proxy", settings.value("addrProxy").toString().toStdString());
     if (settings.contains("nSocksVersion") && settings.value("fUseProxy").toBool())
         SoftSetArg("-socks", settings.value("nSocksVersion").toString().toStdString());
-    if (settings.contains("detachDB"))
-        SoftSetBoolArg("-detachdb", settings.value("detachDB").toBool());
     if (!language.isEmpty())
         SoftSetArg("-lang", language.toStdString());
 }
@@ -86,7 +85,7 @@ bool OptionsModel::Upgrade()
         }
     }
     QList<QString> boolOptions;
-    boolOptions << "bDisplayAddresses" << "fMinimizeToTray" << "fMinimizeOnClose" << "fUseProxy" << "fUseUPnP";
+    boolOptions << "bDisplayAddresses" << "fMinimizeToTray" << "fMinimizeOnClose" << "fUseProxy" << "fUseUPnP" << "fSaveWindowPositionSize";
     foreach(QString key, boolOptions)
     {
         bool value = false;
@@ -142,6 +141,8 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return settings.value("fUseUPnP", GetBoolArg("-upnp", true));
         case MinimizeOnClose:
             return QVariant(fMinimizeOnClose);
+        case SaveWindowPositionSize:
+            return QVariant(fSaveWindowPositionSize);
         case ProxyUse: {
             proxyType proxy;
             return QVariant(GetProxy(NET_IPV4, proxy));
@@ -173,8 +174,6 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
             return QVariant(nDisplayUnit);
         case DisplayAddresses:
             return QVariant(bDisplayAddresses);
-        case DetachDatabases:
-            return QVariant(bitdb.GetDetach());
         case Language:
             return settings.value("language", "");
         default:
@@ -207,6 +206,10 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case MinimizeOnClose:
             fMinimizeOnClose = value.toBool();
             settings.setValue("fMinimizeOnClose", fMinimizeOnClose);
+            break;
+        case SaveWindowPositionSize:
+            fSaveWindowPositionSize = value.toBool();
+            settings.setValue("fSaveWindowPositionSize", fSaveWindowPositionSize);
             break;
         case ProxyUse:
             settings.setValue("fUseProxy", value.toBool());
@@ -255,12 +258,6 @@ bool OptionsModel::setData(const QModelIndex & index, const QVariant & value, in
         case DisplayAddresses:
             bDisplayAddresses = value.toBool();
             settings.setValue("bDisplayAddresses", bDisplayAddresses);
-            break;
-        case DetachDatabases: {
-            bool fDetachDB = value.toBool();
-            bitdb.SetDetach(fDetachDB);
-            settings.setValue("detachDB", fDetachDB);
-            }
             break;
         case Language:
             settings.setValue("language", value);

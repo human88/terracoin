@@ -27,8 +27,6 @@ QT_TRANSLATE_NOOP("terracoin-core", ""
 "Cannot obtain a lock on data directory %s.  Terracoin is probably already "
 "running."),
 QT_TRANSLATE_NOOP("terracoin-core", ""
-"Detach block and address databases. Increases shutdown time (default: 0)"),
-QT_TRANSLATE_NOOP("terracoin-core", ""
 "Error: The transaction was rejected.  This might happen if some of the coins "
 "in your wallet were already spent, such as if you used a copy of wallet.dat "
 "and coins were spent in the copy but not marked as spent here."),
@@ -39,7 +37,7 @@ QT_TRANSLATE_NOOP("terracoin-core", ""
 "Execute command when the best block changes (%s in cmd is replaced by block "
 "hash)"),
 QT_TRANSLATE_NOOP("terracoin-core", ""
-"Listen for JSON-RPC connections on <port> (default: 8332 or testnet: 18332)"),
+"Listen for JSON-RPC connections on <port> (default: 13332 or testnet: 23332)"),
 QT_TRANSLATE_NOOP("terracoin-core", ""
 "Number of seconds to keep misbehaving peers from reconnecting (default: "
 "86400)"),
@@ -107,7 +105,7 @@ QT_TRANSLATE_NOOP("terracoin-core", "Invalid -tor address: '%s'"),
 QT_TRANSLATE_NOOP("terracoin-core", "Invalid amount for -paytxfee=<amount>: '%s'"),
 QT_TRANSLATE_NOOP("terracoin-core", "Invalid amount"),
 QT_TRANSLATE_NOOP("terracoin-core", "List commands"),
-QT_TRANSLATE_NOOP("terracoin-core", "Listen for connections on <port> (default: 8333 or testnet: 18333)"),
+QT_TRANSLATE_NOOP("terracoin-core", "Listen for connections on <port> (default: 13333 or testnet: 23333)"),
 QT_TRANSLATE_NOOP("terracoin-core", "Loading addresses..."),
 QT_TRANSLATE_NOOP("terracoin-core", "Loading block index..."),
 QT_TRANSLATE_NOOP("terracoin-core", "Loading wallet..."),
