@@ -180,4 +180,4 @@ private slots:
     void quit();
 };
 
-#endif
+#endif // BITCOINGUI_H
