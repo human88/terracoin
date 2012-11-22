@@ -22,7 +22,7 @@ class CAddress;
 class CInv;
 class CNode;
 
-class CBlockIndexWorkComparator;
+struct CBlockIndexWorkComparator;
 
 /** The maximum allowed size for a serialized block, in bytes (network rule) */
 static const unsigned int MAX_BLOCK_SIZE = 1000000;
@@ -173,6 +173,11 @@ CBlockIndex * InsertBlockIndex(uint256 hash);
 
 
 
+
+static inline std::string BlockHashStr(const uint256& hash)
+{
+    return hash.ToString();
+}
 
 bool GetWalletFile(CWallet* pwallet, std::string &strWalletFileOut);
 
@@ -625,7 +630,7 @@ public:
 
     // Check whether all inputs of this transaction are valid (no double spends, scripts & sigs, amounts)
     // This does not modify the UTXO set
-    bool CheckInputs(CCoinsViewCache &view, enum CheckSig_mode csmode, bool fStrictPayToScriptHash=true, bool fStrictEncodings=true) const;
+    bool CheckInputs(CCoinsViewCache &view, enum CheckSig_mode csmode, unsigned int flags = SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_STRICTENC) const;
 
     // Apply the effects of this transaction on the UTXO set represented by view
     bool UpdateCoins(CCoinsViewCache &view, CTxUndo &txundo, int nHeight, const uint256 &txhash) const;
@@ -733,7 +738,6 @@ public:
 
     bool WriteToDisk(CDiskBlockPos &pos)
     {
-
         // Open history file to append
         CAutoFile fileout = CAutoFile(OpenUndoFile(pos), SER_DISK, CLIENT_VERSION);
         if (!fileout)
@@ -746,7 +750,7 @@ public:
         // Write undo data
         long fileOutPos = ftell(fileout);
         if (fileOutPos < 0)
-            return error("CBlock::WriteToDisk() : ftell failed");
+            return error("CBlockUndo::WriteToDisk() : ftell failed");
         pos.nPos = (unsigned int)fileOutPos;
         fileout << *this;
 
@@ -757,7 +761,6 @@ public:
 
         return true;
     }
-
 };
 
 /** pruned version of CTransaction: only retains metadata and unspent transaction outputs
@@ -1257,9 +1260,9 @@ public:
     void print() const
     {
         printf("CBlock(hash=%s, ver=%d, hashPrevBlock=%s, hashMerkleRoot=%s, nTime=%u, nBits=%08x, nNonce=%u, vtx=%"PRIszu")\n",
-            GetHash().ToString().substr(0,20).c_str(),
+            BlockHashStr(GetHash()).c_str(),
             nVersion,
-            hashPrevBlock.ToString().substr(0,20).c_str(),
+            BlockHashStr(hashPrevBlock).c_str(),
             hashMerkleRoot.ToString().substr(0,10).c_str(),
             nTime, nBits, nNonce,
             vtx.size());
@@ -1570,7 +1573,7 @@ public:
         return strprintf("CBlockIndex(pprev=%p, pnext=%p, nHeight=%d, merkle=%s, hashBlock=%s)",
             pprev, pnext, nHeight,
             hashMerkleRoot.ToString().substr(0,10).c_str(),
-            GetBlockHash().ToString().substr(0,20).c_str());
+            BlockHashStr(GetBlockHash()).c_str());
     }
 
     void print() const
@@ -1651,7 +1654,7 @@ public:
         str += CBlockIndex::ToString();
         str += strprintf("\n                hashBlock=%s, hashPrev=%s)",
             GetBlockHash().ToString().c_str(),
-            hashPrev.ToString().substr(0,20).c_str());
+            BlockHashStr(hashPrev).c_str());
         return str;
     }
 
@@ -1872,7 +1875,7 @@ public:
     virtual bool GetStats(CCoinsStats &stats);
 
     // As we use CCoinsViews polymorphically, have a virtual destructor
-    virtual ~CCoinsView() {};
+    virtual ~CCoinsView() {}
 };
 
 /** CCoinsView backed by another CCoinsView */
