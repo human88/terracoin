@@ -11,6 +11,7 @@
 #include "init.h"
 #include "ui_interface.h"
 #include <boost/algorithm/string/replace.hpp>
+#include <boost/algorithm/string/predicate.hpp> // for startswith()
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 
@@ -1198,7 +1199,7 @@ bool ConnectBestBlock() {
             pindexNewBest = *it;
         }
 
-        if (pindexNewBest == pindexBest)
+        if (pindexNewBest == pindexBest || (pindexBest && pindexNewBest->bnChainWork == pindexBest->bnChainWork))
             return true; // nothing to do
 
         // check ancestry
@@ -2710,6 +2711,33 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         {
             pfrom->Misbehaving(1);
             return false;
+        }
+
+        // ban known bitcoin pools ip addresses, in case one of them want (again) to
+        // take alt chains out of the game:
+        // TODO use something nicer than this ugly test:
+        // 23.21.225.111 = mining.eligius.st
+        // 176.31.157.133 = slush
+        // 46.4.121.120 = deepbit
+        // 50.31.149 = btcguild
+        // 69.195.155 96.43.135 208.110.68 = eclipsemc
+        // 176.9.104 = bitminter
+        // 62.113.214 192.198.93 59.167.117 = ozcoin
+        if (boost::algorithm::starts_with(pfrom->addr.ToString(), "23.21.225")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "176.31.157")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "46.4.121")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "50.31.149")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "69.195.155")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "96.43.135")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "208.110.68")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "176.9.104")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "62.113.214")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "192.198.93")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "59.167.117"))
+        {
+            pfrom->Misbehaving(100);
+            printf("Banned remote node from addr=%s ; known bitcoin pool.\n", pfrom->addr.ToString().c_str());
+            return (false);
         }
 
         int64 nTime;
