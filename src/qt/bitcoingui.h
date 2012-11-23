@@ -108,6 +108,8 @@ private:
     /** Create system tray (notification) icon */
     void createTrayIcon();
 
+    void storeWindowPosSize();
+
 public slots:
     /** Set number of connections shown in the UI */
     void setNumConnections(int count);
@@ -175,6 +177,7 @@ private slots:
     void showNormalIfMinimized(bool fToggleHidden = false);
     /** Simply calls showNormalIfMinimized(true) for use in SLOT() macro */
     void toggleHidden();
+    void quit();
 };
 
-#endif
+#endif // BITCOINGUI_H
