@@ -42,6 +42,7 @@ namespace Checkpoints
         (13224, uint256("0x00000000000765c69f777ccbc44fab23edab9126f1b4ec5078450aebc3809c36"))
         (14401, uint256("0x0000000000388541b88c57883a480fd6cfa7b93f68e0c71538b08b2c4d875fa2"))
         (15238, uint256("0x000000000000ae09d46bc1a9c5ca4c7b5e51bf23d3108926daa140d64355d390"))
+        (18426, uint256("0x00000000001fb1c075dbfa27f7ba83928a2d35152ccae59c742f698fb8cb8108"))
         ;
 
     static MapCheckpoints mapCheckpointsTestnet =
