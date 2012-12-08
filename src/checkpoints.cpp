@@ -50,11 +50,13 @@ namespace Checkpoints
         (22566, uint256("0x00000000000c28dc052d277d18e104e4e63c53e4018273b3af49f772af205d43"))
         (24076, uint256("0x00000000000522702c7f0ee6fa2ce3978cc0f3056ecc73d8cde1035891c5c4d5"))
         (25372, uint256("0x0000000000202428a01ad6b8a2e256162b5bba35efd1e7f45dc42dbf5861f784"))
+        (25538, uint256("0x00000000002faa5586493e3821d90482348b0462d625d03d086a4a2a2301f6ef"))
         ;
 
     static MapCheckpoints mapCheckpointsTestnet =
         boost::assign::map_list_of
-        ( 546, uint256("000000002a936ca763904c3c35fce2f3556c559c0214345d31b1bcebf76acb70"))
+        (    0, uint256("0x00000000d64b490e447fb522682bfa6bcb27886ed1a94d7a4856fb92ab130875"))
+        (    1, uint256("0x00000000d64b490e447fb522682bfa6bcb27886ed1a94d7a4856fb92ab130875"))
         ;
 
     bool CheckBlock(int nHeight, const uint256& hash)
