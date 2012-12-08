@@ -2367,11 +2367,11 @@ bool LoadBlockIndex()
 {
     if (fTestNet)
     {
-        pchMessageStart[0] = 0x0b;
-        pchMessageStart[1] = 0x11;
-        pchMessageStart[2] = 0x09;
-        pchMessageStart[3] = 0x07;
-        hashGenesisBlock = uint256("000000000933ea01ad0ee984209779baaec3ced90fa3f408719526f8d77f4943");
+        pchMessageStart[0] = 0x41;
+        pchMessageStart[1] = 0xba;
+        pchMessageStart[2] = 0xbe;
+        pchMessageStart[3] = 0x56;
+        hashGenesisBlock = uint256("00000000d64b490e447fb522682bfa6bcb27886ed1a94d7a4856fb92ab130875");
     }
 
     if (fReindex)
@@ -2414,8 +2414,28 @@ bool LoadBlockIndex()
 
         if (fTestNet)
         {
-            block.nTime    = 1296688602;
-            block.nNonce   = 414098458;
+            block.nTime    = 1354965534;
+            block.nNonce   = 1178774204;
+
+            /*
+            // creating a different genesis block:
+            uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+            printf("bnProofOfWorkLimit=%s\n", bnProofOfWorkLimit.ToString().c_str());
+            printf("        hashTarget=%s\n", hashTarget.ToString().c_str());
+            printf("        block hash=%s\n", block.GetHash().ToString().c_str());
+            while (block.GetHash() > hashTarget)
+            {
+                ++block.nNonce;
+                if (block.nNonce % 1000000 == 0) {
+                    printf("current tested nNonce=%u\n  hash=%s\ntarget=%s\n", block.nNonce, block.GetHash().ToString().c_str(), hashTarget.ToString().c_str());
+                }
+                if (block.nNonce == 0)
+                {
+                    printf("NONCE WRAPPED, incrementing time");
+                    ++block.nTime;
+                }
+            }
+            */
         }
 
         //// debug print
