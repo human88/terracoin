@@ -28,6 +28,7 @@ typedef int pid_t; /* define for Windows compatibility */
 #include <openssl/ripemd.h>
 
 #include "netbase.h" // for AddTimeData
+#include "threadpool/threadpool.hpp"
 
 typedef long long  int64;
 typedef unsigned long long  uint64;
@@ -142,6 +143,9 @@ extern bool fTestNet;
 extern bool fNoListen;
 extern bool fLogTimestamps;
 extern bool fReopenDebugLog;
+
+extern bool fTrxNotifier;
+extern boost::threadpool::pool trxnotifierTp;
 
 void RandAddSeed();
 void RandAddSeedPerfmon();

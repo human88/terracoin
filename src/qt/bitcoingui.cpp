@@ -915,7 +915,7 @@ void BitcoinGUI::storeWindowPosSize() {
         int x = pos().x();
         int y = pos().y();
 
-        printf("BitcoinGUI::storeWindowPosSize() saving window position.\n");
+        //printf("BitcoinGUI::storeWindowPosSize() saving window position.\n");
         settings.setValue("mainWindowX", x);
         settings.setValue("mainWindowY", y);
 

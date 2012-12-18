@@ -293,6 +293,10 @@ std::string HelpMessage()
         "  -rpcallowip=<ip>       " + _("Allow JSON-RPC connections from specified IP address") + "\n" +
         "  -rpcconnect=<ip>       " + _("Send commands to node running on <ip> (default: 127.0.0.1)") + "\n" +
         "  -blocknotify=<cmd>     " + _("Execute command when the best block changes (%s in cmd is replaced by block hash)") + "\n" +
+        "  -trxnotifyurl=<url>    " + _("URL where to http-POST updated local incoming transactions data to") + "\n" +
+        "  -trxnotifyminconf=<n>  " + _("Minimum amount of confirmations an incoming transaction must have to notify remote server (default: 1)") + "\n" +
+        "  -trxnotifymaxconf=<n>  " + _("Maximum amount of confirmations an incoming transaction must have to notify remote server (default: 6") + "\n" +
+        "  -trxnotifythreads=<n>  " + _("Max threads the transaction notifier will use (default: 4)") + "\n" +
         "  -upgradewallet         " + _("Upgrade wallet to latest format") + "\n" +
         "  -keypool=<n>           " + _("Set key pool size to <n> (default: 100)") + "\n" +
         "  -rescan                " + _("Rescan the block chain for missing wallet transactions") + "\n" +
@@ -715,6 +719,15 @@ bool AppInit2()
 
     BOOST_FOREACH(string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
+
+    // eventually initialize a threadpool for updated transactions http notifier:
+    std::string strCmd = GetArg("-trxnotifyurl", "");
+    if (!strCmd.empty()) {
+        fTrxNotifier = true;
+        int nTrxNotifThreads = GetArg("-trxnotifythreads", 4);
+        printf("Initializing transaction notifier with %d threads ...\n", nTrxNotifThreads);
+        boost::threadpool::pool trxnotifierTp = boost::threadpool::pool(nTrxNotifThreads);
+    }
 
     // ********************************************************* Step 7: load block chain
 
