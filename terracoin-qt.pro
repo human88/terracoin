@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = terracoin-qt
 VERSION = 0.7.99
-INCLUDEPATH += src src/json src/qt
+INCLUDEPATH += src src/json src/threadpool/include src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
