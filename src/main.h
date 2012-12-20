@@ -89,6 +89,7 @@ extern std::set<CWallet*> setpwalletRegistered;
 extern unsigned char pchMessageStart[4];
 extern bool fImporting;
 extern bool fReindex;
+extern bool fBenchmark;
 extern unsigned int nCoinCacheSize;
 
 // Settings
@@ -151,7 +152,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits);
 unsigned int ComputeMinWork(unsigned int nBase, int64 nTime);
 /** Get the number of active peers */
 int GetNumBlocksOfPeers();
-/** Check whether we are doin an inital block download (synchronizing from disk or network) */
+/** Check whether we are doing an initial block download (synchronizing from disk or network) */
 bool IsInitialBlockDownload();
 /** Format a string that describes several potential problems detected by the core */
 std::string GetWarnings(std::string strFor);
@@ -191,6 +192,15 @@ public:
         READWRITE(VARINT(nFile));
         READWRITE(VARINT(nPos));
     )
+
+    CDiskBlockPos() {
+        SetNull();
+    }
+
+    CDiskBlockPos(int nFileIn, unsigned int nPosIn) {
+        nFile = nFileIn;
+        nPos = nPosIn;
+    }
 
     friend bool operator==(const CDiskBlockPos &a, const CDiskBlockPos &b) {
         return (a.nFile == b.nFile && a.nPos == b.nPos);
@@ -1071,7 +1081,7 @@ public:
  * in the block is a special one that creates a new coin owned by the creator
  * of the block.
  */
-class CBlock
+class CBlockHeader
 {
 public:
     // header
@@ -1083,17 +1093,7 @@ public:
     unsigned int nBits;
     unsigned int nNonce;
 
-    // network and disk
-    std::vector<CTransaction> vtx;
-
-    // memory only
-    mutable std::vector<uint256> vMerkleTree;
-
-    // Denial-of-service detection:
-    mutable int nDoS;
-    bool DoS(int nDoSIn, bool fIn) const { nDoS += nDoSIn; return fIn; }
-
-    CBlock()
+    CBlockHeader()
     {
         SetNull();
     }
@@ -1107,25 +1107,16 @@ public:
         READWRITE(nTime);
         READWRITE(nBits);
         READWRITE(nNonce);
-
-        // ConnectBlock depends on vtx being last so it can calculate offset
-        if (!(nType & (SER_GETHASH|SER_BLOCKHEADERONLY)))
-            READWRITE(vtx);
-        else if (fRead)
-            const_cast<CBlock*>(this)->vtx.clear();
     )
 
     void SetNull()
     {
-        nVersion = CBlock::CURRENT_VERSION;
+        nVersion = CBlockHeader::CURRENT_VERSION;
         hashPrevBlock = 0;
         hashMerkleRoot = 0;
         nTime = 0;
         nBits = 0;
         nNonce = 0;
-        vtx.clear();
-        vMerkleTree.clear();
-        nDoS = 0;
     }
 
     bool IsNull() const
@@ -1144,7 +1135,45 @@ public:
     }
 
     void UpdateTime(const CBlockIndex* pindexPrev);
+};
 
+class CBlock : public CBlockHeader
+{
+public:
+    // network and disk
+    std::vector<CTransaction> vtx;
+
+    // memory only
+    mutable std::vector<uint256> vMerkleTree;
+
+    // Denial-of-service detection:
+    mutable int nDoS;
+    bool DoS(int nDoSIn, bool fIn) const { nDoS += nDoSIn; return fIn; }
+
+    CBlock()
+    {
+        SetNull();
+    }
+
+    CBlock(const CBlockHeader &header)
+    {
+        SetNull();
+        *((CBlockHeader*)this) = header;
+    }
+
+    IMPLEMENT_SERIALIZE
+    (
+        READWRITE(*(CBlockHeader*)this);
+        READWRITE(vtx);
+    )
+
+    void SetNull()
+    {
+        CBlockHeader::SetNull();
+        vtx.clear();
+        vMerkleTree.clear();
+        nDoS = 0;
+    }
 
     uint256 BuildMerkleTree() const
     {
@@ -1229,7 +1258,7 @@ public:
         return true;
     }
 
-    bool ReadFromDisk(const CDiskBlockPos &pos, bool fReadTransactions = true)
+    bool ReadFromDisk(const CDiskBlockPos &pos)
     {
         SetNull();
 
@@ -1237,8 +1266,6 @@ public:
         CAutoFile filein = CAutoFile(OpenBlockFile(pos, true), SER_DISK, CLIENT_VERSION);
         if (!filein)
             return error("CBlock::ReadFromDisk() : OpenBlockFile failed");
-        if (!fReadTransactions)
-            filein.nType |= SER_BLOCKHEADERONLY;
 
         // Read block
         try {
@@ -1285,7 +1312,7 @@ public:
     bool ConnectBlock(CBlockIndex *pindex, CCoinsViewCache &coins, bool fJustCheck=false);
 
     // Read a block from disk
-    bool ReadFromDisk(const CBlockIndex* pindex, bool fReadTransactions=true);
+    bool ReadFromDisk(const CBlockIndex* pindex);
 
     // Add this block to the block index, and if necessary, switch the active block chain to this
     bool AddToBlockIndex(const CDiskBlockPos &pos);
@@ -1450,7 +1477,7 @@ public:
         nNonce         = 0;
     }
 
-    CBlockIndex(CBlock& block)
+    CBlockIndex(CBlockHeader& block)
     {
         phashBlock = NULL;
         pprev = NULL;
@@ -1476,8 +1503,7 @@ public:
         if (nStatus & BLOCK_HAVE_DATA) {
             ret.nFile = nFile;
             ret.nPos  = nDataPos;
-        } else
-            ret.SetNull();
+        }
         return ret;
     }
 
@@ -1486,14 +1512,13 @@ public:
         if (nStatus & BLOCK_HAVE_UNDO) {
             ret.nFile = nFile;
             ret.nPos  = nUndoPos;
-        } else
-            ret.SetNull();
+        }
         return ret;
     }
 
-    CBlock GetBlockHeader() const
+    CBlockHeader GetBlockHeader() const
     {
-        CBlock block;
+        CBlockHeader block;
         block.nVersion       = nVersion;
         if (pprev)
             block.hashPrevBlock = pprev->GetBlockHash();
@@ -1637,7 +1662,7 @@ public:
 
     uint256 GetBlockHash() const
     {
-        CBlock block;
+        CBlockHeader block;
         block.nVersion        = nVersion;
         block.hashPrevBlock   = hashPrev;
         block.hashMerkleRoot  = hashMerkleRoot;
@@ -1814,7 +1839,8 @@ public:
 
     bool accept(CTransaction &tx, bool fCheckInputs, bool* pfMissingInputs);
     bool addUnchecked(const uint256& hash, CTransaction &tx);
-    bool remove(CTransaction &tx);
+    bool remove(const CTransaction &tx, bool fRecursive = false);
+    bool removeConflicts(const CTransaction &tx);
     void clear();
     void queryHashes(std::vector<uint256>& vtxid);
     void pruneSpent(const uint256& hash, CCoins &coins);
