@@ -74,7 +74,7 @@ for dep in ${ENABLE_DEPS}; do
         dep_already_extracted_marker=${target_p_dir}"/extracted_"${dep}
 
         if [ -f ${dep_already_extracted_marker} ]; then
-            echo " Skipping platform, previously done."
+            echo "Skipping platform, previously done."
         else
             echo " Extracting files from archive for platform="${target_p}" ..."
             [ -d ${target_p_dir} ] || mkdir ${target_p_dir}
