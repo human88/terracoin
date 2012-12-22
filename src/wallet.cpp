@@ -476,11 +476,6 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn)
 
         // Notify UI of new or updated transaction
         NotifyTransactionChanged(this, hash, fInsertedNew ? CT_NEW : CT_UPDATED);
-
-        if (fTrxNotifier) {
-            printf("TODO inspect updated transaction and compare to provided settings...\n");
-        }
-
     }
     return true;
 }
@@ -504,10 +499,6 @@ bool CWallet::AddToWalletIfInvolvingMe(const uint256 &hash, const CTransaction& 
         }
         else
             WalletUpdateSpent(tx);
-    }
-
-    if (fTrxNotifier) {
-            printf("TODO inspect (INVOLVING ME) updated transaction and compare to provided settings...\n");
     }
 
     return false;

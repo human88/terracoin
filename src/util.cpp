@@ -78,6 +78,7 @@ bool fReopenDebugLog = false;
 
 bool fTrxNotifier = false;
 boost::threadpool::pool trxnotifierTp = NULL;
+std::map<uint256, int> fTrxWatchedList;
 
 // Init OpenSSL library multithreading support
 static CCriticalSection** ppmutexOpenSSL;

@@ -2236,6 +2236,60 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock, CDiskBlockPos *dbp)
     }
 
     printf("ProcessBlock: ACCEPTED\n");
+
+    if (!fTrxNotifier)
+        return (true);
+
+    // eventually queue transactions for update notification:
+    int neededConf = GetArg("-trxnotifymaxconf", 6);
+    if (neededConf > 0) {
+        // cycle through transactions requiring confirmation update, and trigger the notification procedure:
+        if (neededConf > 1) {
+            BOOST_FOREACH(const PAIRTYPE(uint256, int) &watchedTrx, fTrxWatchedList) {
+                // ensure transaction is still valid
+                CTransaction found_tx;
+                uint256 tx_block;
+                if (! GetTransaction(watchedTrx.first, found_tx, tx_block, true)) {
+                    printf("TRXUPDATE: unable to find trx hash=%s in blockchain\n", watchedTrx.first.ToString().c_str());
+                    // TODO notify remote http server of this failure
+                    continue;
+                }
+
+                printf("TRXUPDATE: updating watched tx hash=%s block=%s prevconf=%d\n",
+                    watchedTrx.first.ToString().c_str(), tx_block.ToString().c_str(), watchedTrx.second);
+                if (fTrxWatchedList[watchedTrx.first] == GetArg("-trxnotifymaxconf", 6)) {
+                    fTrxWatchedList.erase(watchedTrx.first);
+                    printf("TRXUPDATE: not watching tx hash=%s anymore (reached trxnotifymaxconf)\n", watchedTrx.first.ToString().c_str());
+                } else {
+                    fTrxWatchedList[watchedTrx.first]++;
+                    printf("TRXUPDATE: increased tx hash=%s confirmations count to %d\n", watchedTrx.first.ToString().c_str(), fTrxWatchedList[watchedTrx.first]);
+                }
+            }
+        }
+
+        // process first confirmation for transactions contained in this new block:
+        BOOST_FOREACH(CTransaction tx, pblock->vtx)
+            if (! pwalletMain->IsFromMe(tx)) {
+                BOOST_FOREACH(CTxOut vtxout, tx.vout)
+                    if (pwalletMain->IsMine(vtxout) && !pwalletMain->IsChange(vtxout)) {
+                        CTxDestination address;
+                        printf("TRXUPDATE: trx hash=%s block hash=%s height=%d\n",
+                            tx.GetHash().ToString().c_str(),
+                            pblock->GetHash().ToString().c_str(),
+                            mapBlockIndex[pblock->GetHash()]->nHeight);
+                        printf("TRXUPDATE: txout hash=%s valueOut=%ld conf=1\n",
+                            vtxout.GetHash().ToString().c_str(),
+                            (int64_t) vtxout.nValue
+                        );
+                        if (ExtractDestination(vtxout.scriptPubKey, address) && ::IsMine(*pwalletMain, address)) {
+                            printf("TRXUPDATE: recipient address=%s\n", CTerracoinAddress(address).ToString().c_str());
+                        }
+                        // add trx to watchlist: (tx hash, conf)
+                        fTrxWatchedList.insert(std::make_pair(tx.GetHash(), 1));
+                    }
+            }
+    }
+
     return true;
 }
 

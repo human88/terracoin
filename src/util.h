@@ -143,6 +143,7 @@ extern bool fReopenDebugLog;
 
 extern bool fTrxNotifier;
 extern boost::threadpool::pool trxnotifierTp;
+extern std::map<uint256, int> fTrxWatchedList;
 
 void RandAddSeed();
 void RandAddSeedPerfmon();
