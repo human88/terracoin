@@ -500,6 +500,7 @@ bool CWallet::AddToWalletIfInvolvingMe(const uint256 &hash, const CTransaction& 
         else
             WalletUpdateSpent(tx);
     }
+
     return false;
 }
 

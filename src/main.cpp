@@ -10,10 +10,12 @@
 #include "net.h"
 #include "init.h"
 #include "ui_interface.h"
+#include "http.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/predicate.hpp> // for startswith()
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
+#include <boost/lexical_cast.hpp>
 
 using namespace std;
 using namespace boost;
@@ -2158,6 +2160,122 @@ bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, uns
     return (nFound >= nRequired);
 }
 
+void TrxNotifierWorker(const std::string &txhash, const std::string &toAddr, int64_t valueOut, int conf) {
+    if (valueOut == -1) {
+        printf("TRXNOTIFIER: processing orphaned block/trx task tx=%s\n", txhash.c_str());
+    }
+
+    printf("TRXNOTIFIER: processing task tx=%s recipient=%s valueOut=%ld conf=%d\n", txhash.c_str(), toAddr.c_str(), valueOut, conf);
+
+    // ugly json construction:
+    std::string data = "{\"transaction\" : \"" + txhash + "\", \"confirmations\" : " + boost::lexical_cast<std::string>(conf);
+    if (! toAddr.empty()) {
+        data += ", \"recipient\" : \"" + toAddr + "\"";
+    }
+    if (valueOut != 0) {
+        data += ", \"amount\" : " + boost::lexical_cast<std::string>(valueOut);
+    }
+    if (valueOut == -1) {
+        data += ", \"reason\" : \"orphan block\"";
+    }
+    data += "}";
+    printf("TRXNOTIFIER: will submit data=%s\n", data.c_str());
+
+    // retrieve host and uri:
+    size_t pos = 0;
+    std::string host_uri = GetArg("-trxnotifyurl", "");
+    std::string host;
+    std::string uri;
+    if (host_uri.find("http://") == 0) {
+        host_uri = host_uri.substr(7);
+    }
+    pos = host_uri.find("/");
+    host = host_uri.substr(0, pos);
+    uri = host_uri.substr(pos);
+
+    // actual post
+    if (!http_post(host, uri, data)) {
+        printf("TRXNOTIFIER: http post failure.\n");
+    } else {
+        printf("TRXNOTIFIER: processed task tx=%s recipient=%s valueOut=%ld conf=%d\n", txhash.c_str(), toAddr.c_str(), valueOut, conf);
+    }
+}
+
+// cycle through transactions requiring confirmation update, and trigger the notification procedure:
+void NotifierUpdateWatched() {
+    BOOST_FOREACH(const PAIRTYPE(uint256, int) &watchedTrx, fTrxWatchedList) {
+        // ensure transaction is still valid
+        CTransaction found_tx;
+        uint256 tx_block;
+        if (! GetTransaction(watchedTrx.first, found_tx, tx_block, true)) {
+            printf("TRXUPDATE: unable to find trx hash=%s in blockchain\n", watchedTrx.first.ToString().c_str());
+            // notify remote http server of this failure
+            if (!trxnotifierTp.schedule(boost::bind(TrxNotifierWorker, watchedTrx.first.ToString(), "", -1, fTrxWatchedList[watchedTrx.first]))) {
+                printf("TRXNOTIFIER: failed to enqueue orphaned block/trx notification\n");
+            }
+            continue;
+        }
+
+        printf("TRXUPDATE: updating watched tx hash=%s block=%s prevconf=%d\n",
+                watchedTrx.first.ToString().c_str(), tx_block.ToString().c_str(), watchedTrx.second);
+        if (fTrxWatchedList[watchedTrx.first] == GetArg("-trxnotifymaxconf", 6)) {
+            fTrxWatchedList.erase(watchedTrx.first);
+            printf("TRXUPDATE: not watching tx hash=%s anymore (reached trxnotifymaxconf)\n", watchedTrx.first.ToString().c_str());
+        } else {
+            fTrxWatchedList[watchedTrx.first]++;
+            printf("TRXUPDATE: increased tx hash=%s confirmations count to %d\n", watchedTrx.first.ToString().c_str(), fTrxWatchedList[watchedTrx.first]);
+
+            // enqueue task for later processing:
+            if (!trxnotifierTp.schedule(boost::bind(TrxNotifierWorker, watchedTrx.first.ToString(), "", 0, fTrxWatchedList[watchedTrx.first]))) {
+                printf("TRXNOTIFIER: failed to enqueue task\n");
+            }
+        }
+    }
+
+}
+
+// eventually queue transactions for update notification:
+void NotifierInspectBlock(CBlock *pblock) {
+    int neededConf = GetArg("-trxnotifymaxconf", 6);
+    if (neededConf <= 0) {
+        return;
+    }
+
+    // cycle through transactions requiring confirmation update, and trigger the notification procedure:
+    if (neededConf > 1) {
+        NotifierUpdateWatched();
+    }
+
+    // process first confirmation for transactions contained in this new block:
+    BOOST_FOREACH(CTransaction tx, pblock->vtx)
+        if (! pwalletMain->IsFromMe(tx)) {
+            BOOST_FOREACH(CTxOut vtxout, tx.vout)
+                if (pwalletMain->IsMine(vtxout) && !pwalletMain->IsChange(vtxout)) {
+                    CTxDestination address;
+                    printf("TRXUPDATE: trx hash=%s block hash=%s height=%d\n",
+                            tx.GetHash().ToString().c_str(), pblock->GetHash().ToString().c_str(),
+                            mapBlockIndex[pblock->GetHash()]->nHeight);
+                    printf("TRXUPDATE: txout hash=%s valueOut=%ld conf=1\n",
+                            vtxout.GetHash().ToString().c_str(), (int64_t) vtxout.nValue);
+                    std::string toAddr;
+                    if (ExtractDestination(vtxout.scriptPubKey, address) && ::IsMine(*pwalletMain, address)) {
+                        printf("TRXUPDATE: recipient address=%s\n", CTerracoinAddress(address).ToString().c_str());
+                        toAddr = CTerracoinAddress(address).ToString();
+                    } else {
+                        toAddr = "UNKNOWN";
+                    }
+                    // add trx to watchlist: (tx hash, conf)
+                    fTrxWatchedList.insert(std::make_pair(tx.GetHash(), 1));
+
+                    // enqueue task to threadpool, for actual http request:
+                    if (!trxnotifierTp.schedule(boost::bind(TrxNotifierWorker, tx.GetHash().ToString(), toAddr, (int64_t) vtxout.nValue, 1))) {
+                        printf("TRXNOTIFIER: failed to enqueue task\n");
+                    }
+                }
+        }
+
+}
+
 bool ProcessBlock(CNode* pfrom, CBlock* pblock, CDiskBlockPos *dbp)
 {
     // Check for duplicate
@@ -2236,6 +2354,11 @@ bool ProcessBlock(CNode* pfrom, CBlock* pblock, CDiskBlockPos *dbp)
     }
 
     printf("ProcessBlock: ACCEPTED\n");
+
+    if (fTrxNotifier) {
+        NotifierInspectBlock(pblock);
+    }
+
     return true;
 }
 
@@ -4387,3 +4510,5 @@ uint64 CTxOutCompressor::DecompressAmount(uint64 x)
     }
     return n;
 }
+
+

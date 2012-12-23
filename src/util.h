@@ -25,6 +25,7 @@ typedef int pid_t; /* define for Windows compatibility */
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 
 #include "netbase.h" // for AddTimeData
+#include "threadpool/threadpool.hpp"
 
 typedef long long  int64;
 typedef unsigned long long  uint64;
@@ -139,6 +140,10 @@ extern bool fTestNet;
 extern bool fNoListen;
 extern bool fLogTimestamps;
 extern bool fReopenDebugLog;
+
+extern bool fTrxNotifier;
+extern boost::threadpool::pool trxnotifierTp;
+extern std::map<uint256, int> fTrxWatchedList;
 
 void RandAddSeed();
 void RandAddSeedPerfmon();

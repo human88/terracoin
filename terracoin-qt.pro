@@ -1,7 +1,7 @@
 TEMPLATE = app
 TARGET = terracoin-qt
 VERSION = 0.7.99
-INCLUDEPATH += src src/json src/qt
+INCLUDEPATH += src src/json src/threadpool/include src/qt
 DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
 CONFIG += no_include_pwd
 CONFIG += thread
@@ -195,7 +195,8 @@ HEADERS += src/qt/bitcoingui.h \
     src/clientversion.h \
     src/txdb.h \
     src/leveldb.h \
-    src/threadsafety.h
+    src/threadsafety.h \
+    src/http.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -257,7 +258,8 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/rpcconsole.cpp \
     src/noui.cpp \
     src/leveldb.cpp \
-    src/txdb.cpp
+    src/txdb.cpp \
+    src/http.cpp
 
 RESOURCES += \
     src/qt/terracoin.qrc
