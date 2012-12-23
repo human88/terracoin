@@ -13,6 +13,7 @@ USE_IPV6:=-
 INCLUDEPATHS= \
  -I"$(CURDIR)" \
  -I"$(CURDIR)"/obj \
+ -I"$(CURDIR)"/threadpool/include \
  -I"$(MINGW_EXTRALIBS_DIR)/boost_1_50_0" \
  -I"$(MINGW_EXTRALIBS_DIR)/db-4.8.30.NC/build_unix" \
  -I"$(MINGW_EXTRALIBS_DIR)/openssl-1.0.1c/include" \
@@ -88,7 +89,8 @@ OBJS= \
     obj/walletdb.o \
     obj/noui.o \
     obj/leveldb.o \
-    obj/txdb.o
+    obj/txdb.o \
+    obj/http.o
 
 all: terracoind.exe
 

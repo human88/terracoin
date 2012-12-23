@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET = terracoin-qt
 VERSION = 0.7.99
 INCLUDEPATH += src src/json src/threadpool/include src/qt
-DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
+DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE BOOST_TT_HAS_OPERATOR_HPP_INCLUDED
 CONFIG += no_include_pwd
 CONFIG += thread
 
@@ -90,7 +90,7 @@ contains(TERRACOIN_NEED_QT_PLUGINS, 1) {
     QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs qtaccessiblewidgets
 }
 
-INCLUDEPATH += src/leveldb/include src/leveldb/helpers
+INCLUDEPATH += src/leveldb/include src/leveldb/helpers src/threadpool/include
 LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
 !windows {
     genleveldb.commands = cd $$PWD/src/leveldb && $(MAKE) libleveldb.a libmemenv.a
