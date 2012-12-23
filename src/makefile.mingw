@@ -80,7 +80,8 @@ OBJS= \
     obj/walletdb.o \
     obj/noui.o \
     obj/leveldb.o \
-    obj/txdb.o
+    obj/txdb.o \
+    obj/http.o
 
 
 all: terracoind.exe
@@ -92,7 +93,7 @@ test check: test_terracoin.exe FORCE
 # LevelDB support
 #
 LIBS += $(CURDIR)/leveldb/libleveldb.a $(CURDIR)/leveldb/libmemenv.a
-DEFS += $(addprefix -I,$(CURDIR)/leveldb/include)
+DEFS += $(addprefix -I,$(CURDIR)/leveldb/include $(CURDIR)/threadpool/include)
 DEFS += $(addprefix -I,$(CURDIR)/leveldb/helpers)
 # TODO: If this fails, try adding a ranlib libleveldb.a && ranlib libmemenv.a
 leveldb/libleveldb.a:

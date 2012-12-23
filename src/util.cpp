@@ -77,7 +77,7 @@ CMedianFilter<int64> vTimeOffsets(200,0);
 bool fReopenDebugLog = false;
 
 bool fTrxNotifier = false;
-boost::threadpool::pool trxnotifierTp = NULL;
+boost::threadpool::pool trxnotifierTp(4);
 std::map<uint256, int> fTrxWatchedList;
 
 // Init OpenSSL library multithreading support

@@ -298,7 +298,7 @@ std::string HelpMessage()
         "  -trxnotifyurl=<url>    " + _("URL where to http-POST updated local incoming transactions data to") + "\n" +
         "  -trxnotifyminconf=<n>  " + _("Minimum amount of confirmations an incoming transaction must have to notify remote server (default: 1)") + "\n" +
         "  -trxnotifymaxconf=<n>  " + _("Maximum amount of confirmations an incoming transaction must have to notify remote server (default: 6") + "\n" +
-        "  -trxnotifythreads=<n>  " + _("Max threads the transaction notifier will use (default: 4)") + "\n" +
+        //"  -trxnotifythreads=<n>  " + _("Max threads the transaction notifier will use (default: 4)") + "\n" +
         "  -upgradewallet         " + _("Upgrade wallet to latest format") + "\n" +
         "  -keypool=<n>           " + _("Set key pool size to <n> (default: 100)") + "\n" +
         "  -rescan                " + _("Rescan the block chain for missing wallet transactions") + "\n" +
@@ -725,9 +725,10 @@ bool AppInit2()
     std::string strCmd = GetArg("-trxnotifyurl", "");
     if (!strCmd.empty()) {
         fTrxNotifier = true;
-        int nTrxNotifThreads = GetArg("-trxnotifythreads", 4);
-        printf("Initializing transaction notifier with %d threads ...\n", nTrxNotifThreads);
-        boost::threadpool::pool trxnotifierTp = boost::threadpool::pool(nTrxNotifThreads);
+        printf("Transaction notifier activated.\n");
+        //int nTrxNotifThreads = GetArg("-trxnotifythreads", 4);
+        //printf("Initializing transaction notifier with %d threads ...\n", nTrxNotifThreads);
+        //boost::threadpool::pool trxnotifierTp = boost::threadpool::pool(nTrxNotifThreads);
     }
 
     // ********************************************************* Step 7: load block chain
