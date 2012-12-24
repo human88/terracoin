@@ -254,6 +254,8 @@ static const CRPCCommand vRPCCommands[] =
     { "sendrawtransaction",     &sendrawtransaction,     false,  false },
     { "gettxoutsetinfo",        &gettxoutsetinfo,        true,   false },
     { "gettxout",               &gettxout,               true,   false },
+    { "lockunspent",            &lockunspent,            false,  false },
+    { "listlockunspent",        &listlockunspent,        false,  false },
 };
 
 CRPCTable::CRPCTable()
@@ -769,7 +771,7 @@ void ThreadRPCServer2(void* parg)
                 strWhatAmI.c_str(),
                 GetConfigFile().string().c_str(),
                 EncodeBase58(&rand_pwd[0],&rand_pwd[0]+32).c_str()),
-            _("Error"), CClientUIInterface::OK | CClientUIInterface::MODAL);
+                "", CClientUIInterface::MSG_ERROR);
         StartShutdown();
         return;
     }
@@ -860,7 +862,7 @@ void ThreadRPCServer2(void* parg)
     }
 
     if (!fListening) {
-        uiInterface.ThreadSafeMessageBox(strerr, _("Error"), CClientUIInterface::OK | CClientUIInterface::MODAL);
+        uiInterface.ThreadSafeMessageBox(strerr, "", CClientUIInterface::MSG_ERROR);
         StartShutdown();
         return;
     }
@@ -1215,6 +1217,9 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     if (strMethod == "signrawtransaction"     && n > 2) ConvertTo<Array>(params[2], true);
     if (strMethod == "gettxout"               && n > 1) ConvertTo<boost::int64_t>(params[1]);
     if (strMethod == "gettxout"               && n > 2) ConvertTo<bool>(params[2]);
+    if (strMethod == "lockunspent"            && n > 0) ConvertTo<bool>(params[0]);
+    if (strMethod == "lockunspent"            && n > 1) ConvertTo<Array>(params[1]);
+    if (strMethod == "importprivkey"          && n > 2) ConvertTo<bool>(params[2]);
 
     return params;
 }

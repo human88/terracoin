@@ -1,8 +1,8 @@
 TEMPLATE = app
 TARGET = terracoin-qt
 VERSION = 0.7.99
-INCLUDEPATH += src src/json src/qt
-DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE
+INCLUDEPATH += src src/json src/threadpool/include src/qt
+DEFINES += QT_GUI BOOST_THREAD_USE_LIB BOOST_SPIRIT_THREADSAFE BOOST_TT_HAS_OPERATOR_HPP_INCLUDED
 CONFIG += no_include_pwd
 CONFIG += thread
 
@@ -24,6 +24,8 @@ UI_DIR = build
 contains(RELEASE, 1) {
     # Mac: compile for maximum compatibility (10.5, 32-bit)
     macx:QMAKE_CXXFLAGS += -mmacosx-version-min=10.5 -arch i386 -isysroot /Developer/SDKs/MacOSX10.5.sdk
+    macx:QMAKE_CFLAGS += -mmacosx-version-min=10.5 -arch i386 -isysroot /Developer/SDKs/MacOSX10.5.sdk
+    macx:QMAKE_OBJECTIVE_CFLAGS += -mmacosx-version-min=10.5 -arch i386 -isysroot /Developer/SDKs/MacOSX10.5.sdk
 
     !windows:!macx {
         # Linux: static link
@@ -88,7 +90,7 @@ contains(TERRACOIN_NEED_QT_PLUGINS, 1) {
     QTPLUGIN += qcncodecs qjpcodecs qtwcodecs qkrcodecs qtaccessiblewidgets
 }
 
-INCLUDEPATH += src/leveldb/include src/leveldb/helpers
+INCLUDEPATH += src/leveldb/include src/leveldb/helpers src/threadpool/include
 LIBS += $$PWD/src/leveldb/libleveldb.a $$PWD/src/leveldb/libmemenv.a
 !windows {
     genleveldb.commands = cd $$PWD/src/leveldb && $(MAKE) libleveldb.a libmemenv.a
@@ -138,6 +140,7 @@ HEADERS += src/qt/bitcoingui.h \
     src/compat.h \
     src/sync.h \
     src/util.h \
+    src/hash.h \
     src/uint256.h \
     src/serialize.h \
     src/main.h \
@@ -191,7 +194,9 @@ HEADERS += src/qt/bitcoingui.h \
     src/netbase.h \
     src/clientversion.h \
     src/txdb.h \
-    src/leveldb.h
+    src/leveldb.h \
+    src/threadsafety.h \
+    src/http.h
 
 SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/transactiontablemodel.cpp \
@@ -253,7 +258,8 @@ SOURCES += src/qt/bitcoin.cpp src/qt/bitcoingui.cpp \
     src/qt/rpcconsole.cpp \
     src/noui.cpp \
     src/leveldb.cpp \
-    src/txdb.cpp
+    src/txdb.cpp \
+    src/http.cpp
 
 RESOURCES += \
     src/qt/terracoin.qrc
