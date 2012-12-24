@@ -2209,6 +2209,7 @@ void NotifierUpdateWatched() {
         uint256 tx_block;
         if (! GetTransaction(watchedTrx.first, found_tx, tx_block, true)) {
             printf("TRXUPDATE: unable to find trx hash=%s in blockchain\n", watchedTrx.first.ToString().c_str());
+            fTrxWatchedList.erase(watchedTrx.first);
             // notify remote http server of this failure
             if (!trxnotifierTp.schedule(boost::bind(TrxNotifierWorker, watchedTrx.first.ToString(), "", -1, fTrxWatchedList[watchedTrx.first]))) {
                 printf("TRXNOTIFIER: failed to enqueue orphaned block/trx notification\n");
