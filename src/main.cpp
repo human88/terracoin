@@ -2169,7 +2169,7 @@ void TrxNotifierWorker(const std::string &txhash, const std::string &toAddr, int
         printf("TRXNOTIFIER: processing orphaned block/trx task tx=%s\n", txhash.c_str());
     }
 
-    printf("TRXNOTIFIER: processing task tx=%s recipient=%s valueOut=%ld conf=%d\n", txhash.c_str(), toAddr.c_str(), valueOut, conf);
+    printf("TRXNOTIFIER: processing task tx=%s recipient=%s valueOut=%lld conf=%d\n", txhash.c_str(), toAddr.c_str(), valueOut, conf);
 
     // ugly json construction:
     std::string data = "{\"transaction\" : \"" + txhash + "\", \"confirmations\" : " + boost::lexical_cast<std::string>(conf);
@@ -2201,7 +2201,7 @@ void TrxNotifierWorker(const std::string &txhash, const std::string &toAddr, int
     if (!http_post(host, uri, data)) {
         printf("TRXNOTIFIER: http post failure.\n");
     } else {
-        printf("TRXNOTIFIER: processed task tx=%s recipient=%s valueOut=%ld conf=%d\n", txhash.c_str(), toAddr.c_str(), valueOut, conf);
+        printf("TRXNOTIFIER: processed task tx=%s recipient=%s valueOut=%lld conf=%d\n", txhash.c_str(), toAddr.c_str(), valueOut, conf);
     }
 }
 
@@ -2269,7 +2269,7 @@ void NotifierInspectBlock(CBlock *pblock) {
                     printf("TRXNOTIFIER: trx hash=%s block hash=%s height=%d\n",
                             tx.GetHash().ToString().c_str(), pblock->GetHash().ToString().c_str(),
                             mapBlockIndex[pblock->GetHash()]->nHeight);
-                    printf("TRXNOTIFIER: txout hash=%s valueOut=%ld conf=1\n",
+                    printf("TRXNOTIFIER: txout hash=%s valueOut=%lld conf=1\n",
                             vtxout.GetHash().ToString().c_str(), (int64_t) vtxout.nValue);
                     std::string toAddr;
                     if (ExtractDestination(vtxout.scriptPubKey, address) && ::IsMine(*pwalletMain, address)) {
