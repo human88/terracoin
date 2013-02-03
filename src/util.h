@@ -139,7 +139,7 @@ extern std::string strMiscWarning;
 extern bool fTestNet;
 extern bool fNoListen;
 extern bool fLogTimestamps;
-extern bool fReopenDebugLog;
+extern volatile bool fReopenDebugLog;
 
 extern bool fTrxNotifier;
 extern boost::threadpool::pool trxnotifierTp;
