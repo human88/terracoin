@@ -93,7 +93,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
 
             # boost
             need_rebuild=1
-            if [ -f ${platform_src_dir}/boost_1_50_0/stage/lib/libboost_system-mt.a ]; then
+            if [ -f ${platform_src_dir}/boost_1_50_0/stage/lib/libboost_system-mt-s.a ]; then
                 echo "libboost_system-mt.a already built, checking its oldness..."
                 last_mtime=`stat -c "%Z" ${platform_src_dir}/boost_1_50_0/stage/lib/libboost_system-mt.a`
                 now_time=`date +"%s"`
@@ -108,7 +108,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
                 cd ${platform_src_dir}/boost_1_50_0/ || exit_error "Failed to change to boost_1_50_0/ dir"
                 ./bootstrap.sh --without-icu || exit_error "bootstrap failed"
                 echo "using gcc : 4.4 : i586-mingw32msvc-g++ : <rc>i586-mingw32msvc-windres <archiver>i586-mingw32msvc-ar ;" > user-config.jam
-                ./bjam toolset=gcc target-os=windows variant=release threading=multi threadapi=win32 --user-config=user-config.jam -j 2 --without-mpi --without-python -sNO_BZIP2=1 -sNO_ZLIB=1 --layout=tagged stage
+                ./bjam toolset=gcc target-os=windows variant=release threading=multi threadapi=win32 link=static --user-config=user-config.jam -j 2 --without-mpi --without-python -sNO_BZIP2=1 -sNO_ZLIB=1 --layout=tagged --build-type=complete stage
             fi
 
             # qt
@@ -155,7 +155,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
             echo "Building terracoin qt client..."
             cd ${WORKSPACE} || exit_error "Failed to change to workspace dir"
             make distclean
-            PATH=${platform_src_dir}/qt/bin:$PATH ${platform_src_dir}/qt/bin/qmake -spec unsupported/win32-g++-cross MINIUPNPC_LIB_PATH=${platform_src_dir}/miniupnpc-1.6 MINIUPNPC_INCLUDE_PATH=${platform_src_dir} BDB_LIB_PATH=${platform_src_dir}/db-4.8.30.NC/build_unix BDB_INCLUDE_PATH=${platform_src_dir}/db-4.8.30.NC/build_unix BOOST_LIB_PATH=${platform_src_dir}/boost_1_50_0/stage/lib BOOST_INCLUDE_PATH=${platform_src_dir}/boost_1_50_0 BOOST_LIB_SUFFIX=-mt BOOST_THREAD_LIB_SUFFIX=_win32-mt OPENSSL_LIB_PATH=${platform_src_dir}/openssl-1.0.1c OPENSSL_INCLUDE_PATH=${platform_src_dir}/openssl-1.0.1c/include QRENCODE_LIB_PATH=${platform_src_dir}/qrencode-3.2.0/.libs QRENCODE_INCLUDE_PATH=${platform_src_dir}/qrencode-3.2.0 USE_UPNP=1 USE_QRCODE=0 INCLUDEPATH=${platform_src_dir} DEFINES=BOOST_THREAD_USE_LIB BOOST_TT_HAS_OPERATOR_HPP_INCLUDED QMAKE_LRELEASE=lrelease QMAKE_CXXFLAGS=-frandom-seed=terracoin QMAKE_LFLAGS=-frandom-seed=terracoin USE_BUILD_INFO=1 TERRACOIN_NEED_QT_PLUGINS=1 RELEASE=${do_release_build} || exit_error "qmake failed"
+            PATH=${platform_src_dir}/qt/bin:$PATH ${platform_src_dir}/qt/bin/qmake -spec unsupported/win32-g++-cross MINIUPNPC_LIB_PATH=${platform_src_dir}/miniupnpc-1.6 MINIUPNPC_INCLUDE_PATH=${platform_src_dir} BDB_LIB_PATH=${platform_src_dir}/db-4.8.30.NC/build_unix BDB_INCLUDE_PATH=${platform_src_dir}/db-4.8.30.NC/build_unix BOOST_LIB_PATH=${platform_src_dir}/boost_1_50_0/stage/lib BOOST_INCLUDE_PATH=${platform_src_dir}/boost_1_50_0 BOOST_LIB_SUFFIX=-mt BOOST_THREAD_LIB_SUFFIX=_win32-mt OPENSSL_LIB_PATH=${platform_src_dir}/openssl-1.0.1c OPENSSL_INCLUDE_PATH=${platform_src_dir}/openssl-1.0.1c/include QRENCODE_LIB_PATH=${platform_src_dir}/qrencode-3.2.0/.libs QRENCODE_INCLUDE_PATH=${platform_src_dir}/qrencode-3.2.0 USE_UPNP=1 USE_QRCODE=0 INCLUDEPATH=${platform_src_dir} DEFINES=BOOST_THREAD_USE_LIB QMAKE_LRELEASE=lrelease QMAKE_CXXFLAGS=-frandom-seed=terracoin QMAKE_LFLAGS=-frandom-seed=terracoin USE_BUILD_INFO=1 TERRACOIN_NEED_QT_PLUGINS=1 RELEASE=${do_release_build} || exit_error "qmake failed"
             PATH=${platform_src_dir}/qt/bin:$PATH make || exit_error "Make failed"
 
             # terracoin headless daemon:
@@ -192,6 +192,9 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
                     cd ${release_out_dir}/
                     /usr/bin/zip -v -9 ${jobname}-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip COPYING INSTALL README.md terracoind.exe terracoin-qt.exe || exit_error "FAILED to create zip archive."
                     echo "ZIP archive created."
+                    if [ ${jobname} != "dev" ]; then
+                        /usr/bin/scp -q ${jobname}-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip terracoin@frs.sourceforge.net:/home/frs/project/terracoin/SatoshiClone/
+                    fi
                 fi
             #fi
 
