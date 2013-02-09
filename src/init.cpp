@@ -369,6 +369,8 @@ void ThreadImport(void *data) {
             pblocktree->WriteReindexing(false);
             fReindex = false;
             printf("Reindexing finished\n");
+            // To avoid ending up in a situation without genesis block, re-try initializing (no-op if reindexing worked):
+            InitBlockIndex();
         }
     }
 
@@ -815,6 +817,10 @@ bool AppInit2()
 
     if (!LoadBlockIndex())
         return InitError(_("Error loading block database"));
+
+    // Initialize the block index (no-op if non-empty database was already loaded)
+    if (!InitBlockIndex())
+        return InitError(_("Error initializing block database"));
 
     uiInterface.InitMessage(_("Verifying block database integrity..."));
 
