@@ -93,7 +93,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
 
             # boost
             need_rebuild=1
-            if [ -f ${platform_src_dir}/boost_1_50_0/stage/lib/libboost_system-mt.a ]; then
+            if [ -f ${platform_src_dir}/boost_1_50_0/stage/lib/libboost_system-mt-s.a ]; then
                 echo "libboost_system-mt.a already built, checking its oldness..."
                 last_mtime=`stat -c "%Z" ${platform_src_dir}/boost_1_50_0/stage/lib/libboost_system-mt.a`
                 now_time=`date +"%s"`
@@ -108,7 +108,7 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
                 cd ${platform_src_dir}/boost_1_50_0/ || exit_error "Failed to change to boost_1_50_0/ dir"
                 ./bootstrap.sh --without-icu || exit_error "bootstrap failed"
                 echo "using gcc : 4.4 : i586-mingw32msvc-g++ : <rc>i586-mingw32msvc-windres <archiver>i586-mingw32msvc-ar ;" > user-config.jam
-                ./bjam toolset=gcc target-os=windows variant=release threading=multi threadapi=win32 --user-config=user-config.jam -j 2 --without-mpi --without-python -sNO_BZIP2=1 -sNO_ZLIB=1 --layout=tagged stage
+                ./bjam toolset=gcc target-os=windows variant=release threading=multi threadapi=win32 link=static --user-config=user-config.jam -j 2 --without-mpi --without-python -sNO_BZIP2=1 -sNO_ZLIB=1 --layout=tagged --build-type=complete stage
             fi
 
             # qt
@@ -192,6 +192,9 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
                     cd ${release_out_dir}/
                     /usr/bin/zip -v -9 ${jobname}-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip COPYING INSTALL README.md terracoind.exe terracoin-qt.exe || exit_error "FAILED to create zip archive."
                     echo "ZIP archive created."
+                    #if [ ${jobname} != "dev" ]; then
+                        /usr/bin/scp -q ${jobname}-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip terracoin@frs.sourceforge.net:/home/frs/project/terracoin/SatoshiClone/
+                    #fi
                 fi
             #fi
 

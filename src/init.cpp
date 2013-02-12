@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #include "txdb.h"
 #include "walletdb.h"
 #include "bitcoinrpc.h"
@@ -9,6 +10,7 @@
 #include "init.h"
 #include "util.h"
 #include "ui_interface.h"
+
 #include <boost/filesystem.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -82,6 +84,10 @@ void Shutdown(void* parg)
         fShutdown = true;
         nTransactionsUpdated++;
         bitdb.Flush(false);
+        {
+            LOCK(cs_main);
+            ThreadScriptCheckQuit();
+        }
         StopNode();
         {
             LOCK(cs_main);
@@ -181,9 +187,9 @@ bool AppInit(int argc, char* argv[])
         fRet = AppInit2();
     }
     catch (std::exception& e) {
-        PrintException(&e, "AppInit()");
+        PrintExceptionContinue(&e, "AppInit()");
     } catch (...) {
-        PrintException(NULL, "AppInit()");
+        PrintExceptionContinue(NULL, "AppInit()");
     }
     if (!fRet)
         Shutdown(NULL);
@@ -209,16 +215,15 @@ int main(int argc, char* argv[])
 
 bool static InitError(const std::string &str)
 {
-    uiInterface.ThreadSafeMessageBox(str, _("Terracoin"), CClientUIInterface::OK | CClientUIInterface::MODAL);
+    uiInterface.ThreadSafeMessageBox(str, "", CClientUIInterface::MSG_ERROR);
     return false;
 }
 
 bool static InitWarning(const std::string &str)
 {
-    uiInterface.ThreadSafeMessageBox(str, _("Terracoin"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+    uiInterface.ThreadSafeMessageBox(str, "", CClientUIInterface::MSG_WARNING);
     return true;
 }
-
 
 bool static Bind(const CService &addr, unsigned int flags) {
     if (!(flags & BF_EXPLICIT) && IsLimited(addr))
@@ -257,6 +262,7 @@ std::string HelpMessage()
         "  -onlynet=<net>         " + _("Only connect to nodes in network <net> (IPv4, IPv6 or Tor)") + "\n" +
         "  -discover              " + _("Discover own IP address (default: 1 when listening and no -externalip)") + "\n" +
         "  -irc                   " + _("Find peers using internet relay chat (default: 0)") + "\n" +
+        "  -checkpoints           " + _("Only accept block chain matching built-in checkpoints (default: 1)") + "\n" +
         "  -listen                " + _("Accept connections from outside (default: 1 if no -proxy or -connect)") + "\n" +
         "  -bind=<addr>           " + _("Bind to given address and always listen on it. Use [host]:port notation for IPv6") + "\n" +
         "  -dnsseed               " + _("Find peers using DNS lookup (default: 1 unless -connect)") + "\n" +
@@ -293,14 +299,20 @@ std::string HelpMessage()
         "  -rpcallowip=<ip>       " + _("Allow JSON-RPC connections from specified IP address") + "\n" +
         "  -rpcconnect=<ip>       " + _("Send commands to node running on <ip> (default: 127.0.0.1)") + "\n" +
         "  -blocknotify=<cmd>     " + _("Execute command when the best block changes (%s in cmd is replaced by block hash)") + "\n" +
+        "  -trxnotifyurl=<url>    " + _("URL where to http-POST updated local incoming transactions data to") + "\n" +
+        "  -trxnotifyminconf=<n>  " + _("Minimum amount of confirmations an incoming transaction must have to notify remote server (default: 1)") + "\n" +
+        "  -trxnotifymaxconf=<n>  " + _("Maximum amount of confirmations an incoming transaction must have to notify remote server (default: 6") + "\n" +
+        //"  -trxnotifythreads=<n>  " + _("Max threads the transaction notifier will use (default: 4)") + "\n" +
         "  -upgradewallet         " + _("Upgrade wallet to latest format") + "\n" +
         "  -keypool=<n>           " + _("Set key pool size to <n> (default: 100)") + "\n" +
         "  -rescan                " + _("Rescan the block chain for missing wallet transactions") + "\n" +
         "  -salvagewallet         " + _("Attempt to recover private keys from a corrupt wallet.dat") + "\n" +
-        "  -checkblocks=<n>       " + _("How many blocks to check at startup (default: 2500, 0 = all)") + "\n" +
-        "  -checklevel=<n>        " + _("How thorough the block verification is (0-6, default: 1)") + "\n" +
-        "  -loadblock=<file>      " + _("Imports blocks from external blk000?.dat file") + "\n" +
+        "  -checkblocks=<n>       " + _("How many blocks to check at startup (default: 288, 0 = all)") + "\n" +
+        "  -checklevel=<n>        " + _("How thorough the block verification is (0-4, default: 3)") + "\n" +
+        "  -txindex               " + _("Maintain a full transaction index (default: 0)") + "\n" +
+        "  -loadblock=<file>      " + _("Imports blocks from external blk000??.dat file") + "\n" +
         "  -reindex               " + _("Rebuild blockchain index from current blk000??.dat files") + "\n" +
+        "  -par=N                 " + _("Set the number of script verification threads (1-16, 0=auto, default: 0)") + "\n" +
 
         "\n" + _("Block creation options:") + "\n" +
         "  -blockminsize=<n>      "   + _("Set minimum block size in bytes (default: 0)") + "\n" +
@@ -336,7 +348,7 @@ struct CImportData {
 void ThreadImport(void *data) {
     CImportData *import = reinterpret_cast<CImportData*>(data);
 
-    RenameThread("bitcoin-loadblk");
+    RenameThread("terracoin-loadblk");
 
     vnThreadsRunning[THREAD_IMPORT]++;
 
@@ -344,10 +356,8 @@ void ThreadImport(void *data) {
     if (fReindex) {
         CImportingNow imp;
         int nFile = 0;
-        while (!fShutdown) {
-            CDiskBlockPos pos;
-            pos.nFile = nFile;
-            pos.nPos = 0;
+        while (!fRequestShutdown) {
+            CDiskBlockPos pos(nFile, 0);
             FILE *file = OpenBlockFile(pos, true);
             if (!file)
                 break;
@@ -355,16 +365,18 @@ void ThreadImport(void *data) {
             LoadExternalBlockFile(file, &pos);
             nFile++;
         }
-        if (!fShutdown) {
+        if (!fRequestShutdown) {
             pblocktree->WriteReindexing(false);
             fReindex = false;
             printf("Reindexing finished\n");
+            // To avoid ending up in a situation without genesis block, re-try initializing (no-op if reindexing worked):
+            InitBlockIndex();
         }
     }
 
     // hardcoded $DATADIR/bootstrap.dat
     filesystem::path pathBootstrap = GetDataDir() / "bootstrap.dat";
-    if (filesystem::exists(pathBootstrap) && !fShutdown) {
+    if (filesystem::exists(pathBootstrap) && !fRequestShutdown) {
         FILE *file = fopen(pathBootstrap.string().c_str(), "rb");
         if (file) {
             CImportingNow imp;
@@ -377,7 +389,7 @@ void ThreadImport(void *data) {
 
     // -loadblock=
     BOOST_FOREACH(boost::filesystem::path &path, import->vFiles) {
-        if (fShutdown)
+        if (fRequestShutdown)
             break;
         FILE *file = fopen(path.string().c_str(), "rb");
         if (file) {
@@ -482,6 +494,16 @@ bool AppInit2()
     // ********************************************************* Step 3: parameter-to-internal-flags
 
     fDebug = GetBoolArg("-debug");
+    fBenchmark = GetBoolArg("-benchmark");
+
+    // -par=0 means autodetect, but nScriptCheckThreads==0 means no concurrency
+    nScriptCheckThreads = GetArg("-par", 0);
+    if (nScriptCheckThreads == 0)
+        nScriptCheckThreads = boost::thread::hardware_concurrency();
+    if (nScriptCheckThreads <= 1) 
+        nScriptCheckThreads = 0;
+    else if (nScriptCheckThreads > MAX_SCRIPTCHECK_THREADS)
+        nScriptCheckThreads = MAX_SCRIPTCHECK_THREADS;
 
     // -debug implies fDebug*
     if (fDebug)
@@ -570,7 +592,7 @@ bool AppInit2()
     printf("Terracoin version %s (%s)\n", FormatFullVersion().c_str(), CLIENT_DATE.c_str());
     printf("Using OpenSSL version %s\n", SSLeay_version(SSLEAY_VERSION));
     if (!fLogTimestamps)
-        printf("Startup time: %s\n", DateTimeStrFormat("%x %H:%M:%S", GetTime()).c_str());
+        printf("Startup time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()).c_str());
     printf("Default data directory %s\n", GetDefaultDataDir().string().c_str());
     printf("Used data directory %s\n", strDataDir.c_str());
     std::ostringstream strErrors;
@@ -578,11 +600,17 @@ bool AppInit2()
     if (fDaemon)
         fprintf(stdout, "Terracoin server starting\n");
 
+    if (nScriptCheckThreads) {
+        printf("Using %u threads for script verification\n", nScriptCheckThreads);
+        for (int i=0; i<nScriptCheckThreads-1; i++)
+            NewThread(ThreadScriptCheck, NULL);
+    }
+
     int64 nStart;
 
-    // ********************************************************* Step 5: verify database integrity
+    // ********************************************************* Step 5: verify wallet database integrity
 
-    uiInterface.InitMessage(_("Verifying database integrity..."));
+    uiInterface.InitMessage(_("Verifying wallet integrity..."));
 
     if (!bitdb.Open(GetDataDir()))
     {
@@ -608,7 +636,7 @@ bool AppInit2()
                                      " Original wallet.dat saved as wallet.{timestamp}.bak in %s; if"
                                      " your balance or transactions are incorrect you should"
                                      " restore from a backup."), strDataDir.c_str());
-            uiInterface.ThreadSafeMessageBox(msg, _("Terracoin"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+            InitWarning(msg);
         }
         if (r == CDBEnv::RECOVER_FAIL)
             return InitError(_("wallet.dat corrupt, salvage failed"));
@@ -716,6 +744,16 @@ bool AppInit2()
     BOOST_FOREACH(string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
 
+    // eventually initialize a threadpool for updated transactions http notifier:
+    std::string strCmd = GetArg("-trxnotifyurl", "");
+    if (!strCmd.empty()) {
+        fTrxNotifier = true;
+        printf("Transaction notifier activated.\n");
+        //int nTrxNotifThreads = GetArg("-trxnotifythreads", 4);
+        //printf("Initializing transaction notifier with %d threads ...\n", nTrxNotifThreads);
+        //boost::threadpool::pool trxnotifierTp = boost::threadpool::pool(nTrxNotifThreads);
+    }
+
     // ********************************************************* Step 7: load block chain
 
     fReindex = GetBoolArg("-reindex");
@@ -728,12 +766,39 @@ bool AppInit2()
         return InitError(msg);
     }
 
+    // Upgrading to 0.8; hard-link the old blknnnn.dat files into /blocks/
+    filesystem::path blocksDir = GetDataDir() / "blocks";
+    if (!filesystem::exists(blocksDir))
+    {
+        filesystem::create_directories(blocksDir);
+        bool linked = false;
+        for (unsigned int i = 1; i < 10000; i++) {
+            filesystem::path source = GetDataDir() / strprintf("blk%04u.dat", i);
+            if (!filesystem::exists(source)) break;
+            filesystem::path dest = blocksDir / strprintf("blk%05u.dat", i-1);
+            try {
+                filesystem::create_hard_link(source, dest);
+                printf("Hardlinked %s -> %s\n", source.string().c_str(), dest.string().c_str());
+                linked = true;
+            } catch (filesystem::filesystem_error & e) {
+                // Note: hardlink creation failing is not a disaster, it just means
+                // blocks will get re-downloaded from peers.
+                printf("Error hardlinking blk%04u.dat : %s\n", i, e.what());
+                break;
+            }
+        }
+        if (linked)
+        {
+            fReindex = true;
+        }
+    }
+
     // cache size calculations
     size_t nTotalCache = GetArg("-dbcache", 25) << 20;
     if (nTotalCache < (1 << 22))
         nTotalCache = (1 << 22); // total cache cannot be less than 4 MiB
     size_t nBlockTreeDBCache = nTotalCache / 8;
-    if (nBlockTreeDBCache > (1 << 21))
+    if (nBlockTreeDBCache > (1 << 21) && !GetBoolArg("-txindex", false))
         nBlockTreeDBCache = (1 << 21); // block tree db cache shouldn't be larger than 2 MiB
     nTotalCache -= nBlockTreeDBCache;
     size_t nCoinDBCache = nTotalCache / 2; // use half of the remaining cache for coindb cache
@@ -741,7 +806,7 @@ bool AppInit2()
     nCoinCacheSize = nTotalCache / 300; // coins in memory require around 300 bytes
 
     uiInterface.InitMessage(_("Loading block index..."));
-    printf("Loading block index...\n");
+
     nStart = GetTimeMillis();
     pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
     pcoinsdbview = new CCoinsViewDB(nCoinDBCache, false, fReindex);
@@ -751,7 +816,19 @@ bool AppInit2()
         pblocktree->WriteReindexing(true);
 
     if (!LoadBlockIndex())
-        return InitError(_("Error loading blkindex.dat"));
+        return InitError(_("Error loading block database"));
+
+    // Initialize the block index (no-op if non-empty database was already loaded)
+    if (!InitBlockIndex())
+        return InitError(_("Error initializing block database"));
+
+    uiInterface.InitMessage(_("Verifying block database integrity..."));
+
+    if (!VerifyDB())
+        return InitError(_("Corrupted block database detected. Please restart the client with -reindex."));
+
+    if (mapArgs.count("-txindex") && fTxIndex != GetBoolArg("-txindex", false))
+        return InitError(_("You need to rebuild the databases using -reindex to change -txindex"));
 
     // as LoadBlockIndex can take several minutes, it's possible the user
     // requested to kill terracoin-qt during the last operation. If so, exit.
@@ -795,7 +872,7 @@ bool AppInit2()
     // ********************************************************* Step 8: load wallet
 
     uiInterface.InitMessage(_("Loading wallet..."));
-    printf("Loading wallet...\n");
+
     nStart = GetTimeMillis();
     bool fFirstRun = true;
     pwalletMain = new CWallet("wallet.dat");
@@ -808,7 +885,7 @@ bool AppInit2()
         {
             string msg(_("Warning: error reading wallet.dat! All keys read correctly, but transaction data"
                          " or address book entries might be missing or incorrect."));
-            uiInterface.ThreadSafeMessageBox(msg, _("Terracoin"), CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+            InitWarning(msg);
         }
         else if (nLoadWalletRet == DB_TOO_NEW)
             strErrors << _("Error loading wallet.dat: Wallet requires newer version of Terracoin") << "\n";
@@ -866,7 +943,7 @@ bool AppInit2()
         if (walletdb.ReadBestBlock(locator))
             pindexRescan = locator.GetBlockIndex();
     }
-    if (pindexBest != pindexRescan)
+    if (pindexBest && pindexBest != pindexRescan)
     {
         uiInterface.InitMessage(_("Rescanning..."));
         printf("Rescanning last %i blocks (from block %i)...\n", pindexBest->nHeight - pindexRescan->nHeight, pindexRescan->nHeight);
@@ -879,7 +956,8 @@ bool AppInit2()
 
     // scan for better chains in the block chain database, that are not yet connected in the active best chain
     uiInterface.InitMessage(_("Importing blocks from block database..."));
-    if (!ConnectBestBlock())
+    CValidationState state;
+    if (!ConnectBestBlock(state))
         strErrors << "Failed to connect best block";
 
     CImportData *pimport = new CImportData();
@@ -893,7 +971,7 @@ bool AppInit2()
     // ********************************************************* Step 10: load peers
 
     uiInterface.InitMessage(_("Loading addresses..."));
-    printf("Loading addresses...\n");
+
     nStart = GetTimeMillis();
 
     {
@@ -914,7 +992,7 @@ bool AppInit2()
 
     //// debug print
     printf("mapBlockIndex.size() = %"PRIszu"\n",   mapBlockIndex.size());
-    printf("nBestHeight = %d\n",            nBestHeight);
+    printf("nBestHeight = %d\n",                   nBestHeight);
     printf("setKeyPool.size() = %"PRIszu"\n",      pwalletMain->setKeyPool.size());
     printf("mapWallet.size() = %"PRIszu"\n",       pwalletMain->mapWallet.size());
     printf("mapAddressBook.size() = %"PRIszu"\n",  pwalletMain->mapAddressBook.size());
@@ -928,7 +1006,6 @@ bool AppInit2()
     // ********************************************************* Step 12: finished
 
     uiInterface.InitMessage(_("Done loading"));
-    printf("Done loading\n");
 
     if (!strErrors.str().empty())
         return InitError(strErrors.str());

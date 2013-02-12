@@ -61,6 +61,24 @@ void OptionsModel::Init()
         SoftSetArg("-lang", language.toStdString());
 }
 
+void OptionsModel::Reset()
+{
+    QSettings settings;
+
+    // Remove all entries in this QSettings object
+    settings.clear();
+
+    // default setting for OptionsModel::StartAtStartup - disabled
+    if (GUIUtil::GetStartOnSystemStartup())
+        GUIUtil::SetStartOnSystemStartup(false);
+
+    // Re-Init to get default values
+    Init();
+
+    // Ensure Upgrade() is not running again by setting the bImportFinished flag
+    settings.setValue("bImportFinished", true);
+}
+
 bool OptionsModel::Upgrade()
 {
     QSettings settings;
@@ -138,7 +156,11 @@ QVariant OptionsModel::data(const QModelIndex & index, int role) const
         case MinimizeToTray:
             return QVariant(fMinimizeToTray);
         case MapPortUPnP:
+#ifdef USE_UPNP
             return settings.value("fUseUPnP", GetBoolArg("-upnp", true));
+#else
+            return QVariant(false);
+#endif
         case MinimizeOnClose:
             return QVariant(fMinimizeOnClose);
         case SaveWindowPositionSize:
