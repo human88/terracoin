@@ -4,6 +4,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "alert.h"
+#include "bitcoinrpc.h"
 #include "checkpoints.h"
 #include "db.h"
 #include "txdb.h"
@@ -12,6 +13,7 @@
 #include "ui_interface.h"
 #include "http.h"
 #include "checkqueue.h"
+#include "json/json_spirit_utils.h"
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/predicate.hpp> // for startswith()
 #include <boost/filesystem.hpp>
@@ -2216,17 +2218,41 @@ void TrxNotifierWorker(const std::string &txhash, const std::string &toAddr, int
     printf("TRXNOTIFIER: processing task tx=%s recipient=%s valueOut=%"PRI64d" conf=%d\n", txhash.c_str(), toAddr.c_str(), valueOut, conf);
 
     // ugly json construction:
-    std::string data = "{\"transaction\" : \"" + txhash + "\", \"confirmations\" : " + boost::lexical_cast<std::string>(conf);
-    if (! toAddr.empty()) {
-        data += ", \"recipient\" : \"" + toAddr + "\"";
-    }
+    std::string data = "{";
     if (valueOut != 0) {
-        data += ", \"amount\" : " + boost::lexical_cast<std::string>(valueOut);
+        data += "\"amount\" : " + boost::lexical_cast<std::string>(valueOut) + ", ";
     }
+    data += "\"confirmations\" : " + boost::lexical_cast<std::string>(conf) + ", ";
     if (valueOut == -1) {
-        data += ", \"reason\" : \"orphan block\"";
+        data += "\"reason\" : \"orphan block\", ";
     }
-    data += "}";
+    if (! toAddr.empty()) {
+        data += "\"recipient\" : \"" + toAddr + "\", ";
+    }
+    data += "\"transaction\" : \"" + txhash + "\"";
+    data += "}\n";
+
+    // only sign first submitted data (the one containing recipient address)
+    // submitted data (obviously without signature part) is signed using existing
+    // ecdsa functions from rpcwallet:
+    if (! toAddr.empty()) {
+        try {
+            json_spirit::Array sign_params;
+            sign_params.push_back(toAddr);
+            sign_params.push_back(data);
+
+            json_spirit::Value ret = signmessage(sign_params, false);
+            if (ret.type() == json_spirit::str_type) {
+                printf("TRXNOTIFIER: signature: %s\n", ret.get_str().c_str());
+                data += "{\"signature\" : \"" + ret.get_str() + "\"";
+            } else {
+                printf("TRXNOTIFIER: WARNING, signmessage() call did not return a string.\n");
+            }
+        } catch (std::exception &e) {
+            printf("TRXNOTIFIER: FAILED to sign data: err=%s\n", e.what());
+        }
+    }
+
     printf("TRXNOTIFIER: will submit data=%s\n", data.c_str());
 
     // retrieve configured host and uri where to transmit transaction data:
