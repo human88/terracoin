@@ -2244,7 +2244,7 @@ void TrxNotifierWorker(const std::string &txhash, const std::string &toAddr, int
             json_spirit::Value ret = signmessage(sign_params, false);
             if (ret.type() == json_spirit::str_type) {
                 printf("TRXNOTIFIER: signature: %s\n", ret.get_str().c_str());
-                data += "{\"signature\" : \"" + ret.get_str() + "\"";
+                data += "{\"signature\" : \"" + ret.get_str() + "\"}";
             } else {
                 printf("TRXNOTIFIER: WARNING, signmessage() call did not return a string.\n");
             }
