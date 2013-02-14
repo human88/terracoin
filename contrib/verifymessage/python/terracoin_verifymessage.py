@@ -169,7 +169,7 @@ if __name__ == '__main__':
     #addr = '1NgPNqNPvEGGFfpcgAZCPs2L6NDYPsJK18'
     #sig = 'H96LWgOFIomKOnspN9eBDwr0SMriQVcK56ie/kfjW5uSQ653Hy3mme8kS2qQHd/+xqkfAUujHMLfOeHMLymDriE='
     #msg = 'simple test'
-    print verify_message(addr, sig, msg)
+    #print verify_message(addr, sig, msg)
 
     # true:
     # {"amount" : 20000000, "confirmations" : 1, "recipient" : "1AM4hKmKqgZVNMbws4siEnuS1uNtGfFEGJ", "transaction" : "a90ced5605ea39268ba4ac3cae014dc67a300c8561faf5b2571232d05caca820"}
