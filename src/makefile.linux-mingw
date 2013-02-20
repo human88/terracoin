@@ -54,6 +54,7 @@ ifneq (${USE_UPNP}, -)
 	LIBPATHS += -L"$(MINGW_EXTRALIBS_DIR)/miniupnpc"
 	LIBS += -l miniupnpc -l iphlpapi
 	DEFS += -DSTATICLIB -DUSE_UPNP=$(USE_UPNP)
+	INCLUDEPATHS += -I"$(MINGW_EXTRALIBS_DIR)"
 endif
 
 ifneq (${USE_IPV6}, -)
