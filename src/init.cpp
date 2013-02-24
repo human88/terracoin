@@ -304,6 +304,7 @@ std::string HelpMessage()
         "  -trxnotifyminconf=<n>  " + _("Minimum amount of confirmations an incoming transaction must have to notify remote server (default: 1)") + "\n" +
         "  -trxnotifymaxconf=<n>  " + _("Maximum amount of confirmations an incoming transaction must have to notify remote server (default: 6") + "\n" +
         //"  -trxnotifythreads=<n>  " + _("Max threads the transaction notifier will use (default: 4)") + "\n" +
+        "  -walletnotify=<cmd>    " + _("Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)") + "\n" +
         "  -upgradewallet         " + _("Upgrade wallet to latest format") + "\n" +
         "  -keypool=<n>           " + _("Set key pool size to <n> (default: 100)") + "\n" +
         "  -rescan                " + _("Rescan the block chain for missing wallet transactions") + "\n" +
@@ -501,7 +502,7 @@ bool AppInit2()
     nScriptCheckThreads = GetArg("-par", 0);
     if (nScriptCheckThreads == 0)
         nScriptCheckThreads = boost::thread::hardware_concurrency();
-    if (nScriptCheckThreads <= 1) 
+    if (nScriptCheckThreads <= 1)
         nScriptCheckThreads = 0;
     else if (nScriptCheckThreads > MAX_SCRIPTCHECK_THREADS)
         nScriptCheckThreads = MAX_SCRIPTCHECK_THREADS;
@@ -839,7 +840,7 @@ bool AppInit2()
                     break;
                 }
 
-                uiInterface.InitMessage(_("Verifying block database integrity..."));
+                uiInterface.InitMessage(_("Verifying database..."));
                 if (!VerifyDB()) {
                     strLoadError = _("Corrupted block database detected");
                     break;
