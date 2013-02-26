@@ -228,9 +228,9 @@ void ThreadIRCSeed2(void* parg)
 
     while (!fShutdown)
     {
-        CService addrConnect("46.105.103.55", 6667); // irc.terracoin.org
+        CService addrConnect("92.243.23.21", 6667); // irc.lfnet.org
 
-        CService addrIRC("irc.terracoin.org", 6667, true);
+        CService addrIRC("irc.lfnet.org", 6667, true);
         if (addrIRC.IsValid())
             addrConnect = addrIRC;
 
