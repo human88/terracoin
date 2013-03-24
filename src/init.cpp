@@ -82,6 +82,7 @@ void Shutdown(void* parg)
     if (fFirstThread)
     {
         fShutdown = true;
+        fRequestShutdown = true;
         nTransactionsUpdated++;
         bitdb.Flush(false);
         {
@@ -303,6 +304,7 @@ std::string HelpMessage()
         "  -trxnotifyminconf=<n>  " + _("Minimum amount of confirmations an incoming transaction must have to notify remote server (default: 1)") + "\n" +
         "  -trxnotifymaxconf=<n>  " + _("Maximum amount of confirmations an incoming transaction must have to notify remote server (default: 6") + "\n" +
         //"  -trxnotifythreads=<n>  " + _("Max threads the transaction notifier will use (default: 4)") + "\n" +
+        "  -walletnotify=<cmd>    " + _("Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)") + "\n" +
         "  -upgradewallet         " + _("Upgrade wallet to latest format") + "\n" +
         "  -keypool=<n>           " + _("Set key pool size to <n> (default: 100)") + "\n" +
         "  -rescan                " + _("Rescan the block chain for missing wallet transactions") + "\n" +
@@ -500,7 +502,7 @@ bool AppInit2()
     nScriptCheckThreads = GetArg("-par", 0);
     if (nScriptCheckThreads == 0)
         nScriptCheckThreads = boost::thread::hardware_concurrency();
-    if (nScriptCheckThreads <= 1) 
+    if (nScriptCheckThreads <= 1)
         nScriptCheckThreads = 0;
     else if (nScriptCheckThreads > MAX_SCRIPTCHECK_THREADS)
         nScriptCheckThreads = MAX_SCRIPTCHECK_THREADS;
@@ -805,27 +807,69 @@ bool AppInit2()
     nTotalCache -= nCoinDBCache;
     nCoinCacheSize = nTotalCache / 300; // coins in memory require around 300 bytes
 
-    uiInterface.InitMessage(_("Loading block index..."));
+    bool fLoaded = false;
+    while (!fLoaded) {
+        bool fReset = fReindex;
+        std::string strLoadError;
 
-    nStart = GetTimeMillis();
-    pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
-    pcoinsdbview = new CCoinsViewDB(nCoinDBCache, false, fReindex);
-    pcoinsTip = new CCoinsViewCache(*pcoinsdbview);
+        uiInterface.InitMessage(_("Loading block index..."));
 
-    if (fReindex)
-        pblocktree->WriteReindexing(true);
+        nStart = GetTimeMillis();
+        do {
+            try {
+                UnloadBlockIndex();
+                delete pcoinsTip;
+                delete pcoinsdbview;
+                delete pblocktree;
 
-    if (!LoadBlockIndex())
-        return InitError(_("Error loading block database"));
+                pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
+                pcoinsdbview = new CCoinsViewDB(nCoinDBCache, false, fReindex);
+                pcoinsTip = new CCoinsViewCache(*pcoinsdbview);
 
-    // Initialize the block index (no-op if non-empty database was already loaded)
-    if (!InitBlockIndex())
-        return InitError(_("Error initializing block database"));
+                if (fReindex)
+                    pblocktree->WriteReindexing(true);
 
-    uiInterface.InitMessage(_("Verifying block database integrity..."));
+                if (!LoadBlockIndex()) {
+                    strLoadError = _("Error loading block database");
+                    break;
+                }
 
-    if (!VerifyDB())
-        return InitError(_("Corrupted block database detected. Please restart the client with -reindex."));
+                // Initialize the block index (no-op if non-empty database was already loaded)
+                if (!InitBlockIndex()) {
+                    strLoadError = _("Error initializing block database");
+                    break;
+                }
+
+                uiInterface.InitMessage(_("Verifying database..."));
+                if (!VerifyDB()) {
+                    strLoadError = _("Corrupted block database detected");
+                    break;
+                }
+            } catch(std::exception &e) {
+                strLoadError = _("Error opening block database");
+                break;
+            }
+
+            fLoaded = true;
+        } while(false);
+
+        if (!fLoaded) {
+            // first suggest a reindex
+            if (!fReset) {
+                bool fRet = uiInterface.ThreadSafeMessageBox(
+                    strLoadError + ".\n" + _("Do you want to rebuild the block database now?"),
+                    "", CClientUIInterface::MSG_ERROR | CClientUIInterface::BTN_ABORT);
+                if (fRet) {
+                    fReindex = true;
+                    fRequestShutdown = false;
+                } else {
+                    return false;
+                }
+            } else {
+                return InitError(strLoadError);
+            }
+        }
+    }
 
     if (mapArgs.count("-txindex") && fTxIndex != GetBoolArg("-txindex", false))
         return InitError(_("You need to rebuild the databases using -reindex to change -txindex"));

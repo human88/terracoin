@@ -192,9 +192,6 @@ for CUR_PLATFORM in ${TARGET_PLATFORMS}; do
                     cd ${release_out_dir}/
                     /usr/bin/zip -v -9 ${jobname}-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip COPYING INSTALL README.md terracoind.exe terracoin-qt.exe || exit_error "FAILED to create zip archive."
                     echo "ZIP archive created."
-                    #if [ ${jobname} != "dev" ]; then
-                        /usr/bin/scp -q ${jobname}-${RELEASE_VERSION}-${BUILD_NUMBER}-win32.zip terracoin@frs.sourceforge.net:/home/frs/project/terracoin/SatoshiClone/
-                    #fi
                 fi
             #fi
 
