@@ -1105,6 +1105,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     // Only change once per interval
     if ((pindexLast->nHeight+1) % nInterval != 0)
     {
+        /*
         // Special difficulty rule for testnet:
         if (fTestNet)
         {
@@ -1121,13 +1122,21 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
                 return pindex->nBits;
             }
         }
+        */
 
         return pindexLast->nBits;
     }
 
-    // Go back by what we want to be 14 days worth of blocks
+    // Go back by what we want to be 1 hour worth of blocks:
+    // <detailed comment removed for now>
+    int nBlocksLookupRange = nInterval-1; // defaults: use nInterval blocks count (eg: 100031 to 100060).
+    if ((fTestNet && pindexLast->nHeight > 89)) { // || pindexLast->nHeight > 91888) {
+        // testnet switch at block 120
+        // prodnet switch at block 91890
+        nBlocksLookupRange = nInterval;
+    }
     const CBlockIndex* pindexFirst = pindexLast;
-    for (int i = 0; pindexFirst && i < nInterval-1; i++)
+    for (int i = 0; pindexFirst && i < nBlocksLookupRange ; i++)
         pindexFirst = pindexFirst->pprev;
     assert(pindexFirst);
 
@@ -1153,6 +1162,8 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     printf("nTargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", nTargetTimespan, nActualTimespan);
     printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
     printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+    printf("first height=%d time=%"PRI64d"\n", pindexFirst->nHeight, pindexFirst->GetBlockTime());
+    printf("last  height=%d time=%"PRI64d"\n", pindexLast->nHeight, pindexLast->GetBlockTime());
 
     return bnNew.GetCompact();
 }
@@ -2066,7 +2077,7 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
         return state.DoS(50, error("CheckBlock() : proof of work failed"));
 
     // Check timestamp
-    if (GetBlockTime() > GetAdjustedTime() + 2 * 60 * 60)
+    if (GetBlockTime() > GetAdjustedTime() + 15 * 60)
         return state.Invalid(error("CheckBlock() : block timestamp too far in the future"));
 
     // First transaction must be coinbase, the rest must not be

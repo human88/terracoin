@@ -15,6 +15,10 @@ src/test_terracoin
 Makefile
 terracoin-qt
 
+# Unit-tests
+Makefile.test
+bitcoin-qt_test
+
 # Resources cpp
 qrc_*.cpp
 
