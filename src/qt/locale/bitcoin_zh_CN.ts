@@ -2135,7 +2135,7 @@ Address: %4
 <context>
     <name>terracoin-core</name>
     <message>
-        <location filename="../terracoinstrings.cpp" line="+88"/>
+        <location filename="../bitcoinstrings.cpp" line="+88"/>
         <source>Terracoin version</source>
         <translation>比特币版本</translation>
     </message>
