@@ -6,7 +6,7 @@
 # (for a list of valid platforms, see 1.env-setup.sh)
 #
 
-RELEASE_VERSION="0.1.2"
+RELEASE_VERSION="0.1.3"
 SOURCE_DESTDIR=/home/terracoin/dependencies
 RELEASE_PUBLISH_DIR=/home/terracoin/releases
 TARGET_PLATFORMS=("mingw32")
