@@ -1128,12 +1128,15 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     }
 
     // Go back by what we want to be 1 hour worth of blocks:
-    // <detailed comment removed for now>
-    int nBlocksLookupRange = nInterval-1; // defaults: use nInterval blocks count (eg: 100031 to 100060).
-    if ((fTestNet && pindexLast->nHeight > 89)) { // || pindexLast->nHeight > 91888) {
-        // testnet switch at block 120
-        // prodnet switch at block 91890
-        nBlocksLookupRange = nInterval;
+    int nBlocksLookupRange = nInterval-1;
+    if (fTestNet) {
+        if (pindexLast->nHeight > 89) {
+            nBlocksLookupRange = nInterval;
+        }
+    } else {
+        if (pindexLast->nHeight > 99988) {
+            nBlocksLookupRange = nInterval * 24;
+        }
     }
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < nBlocksLookupRange ; i++)
@@ -1142,6 +1145,9 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 
     // Limit adjustment step
     int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
+    if (pindexLast->nHeight > 99988) {
+        nActualTimespan = nActualTimespan / 24;
+    }
     printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
     if (nActualTimespan < nTargetTimespan/4)
         nActualTimespan = nTargetTimespan/4;
