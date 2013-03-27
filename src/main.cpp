@@ -1105,6 +1105,7 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     // Only change once per interval
     if ((pindexLast->nHeight+1) % nInterval != 0)
     {
+        /*
         // Special difficulty rule for testnet:
         if (fTestNet)
         {
@@ -1121,18 +1122,32 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
                 return pindex->nBits;
             }
         }
+        */
 
         return pindexLast->nBits;
     }
 
-    // Go back by what we want to be 14 days worth of blocks
+    // Go back by what we want to be 1 hour worth of blocks:
+    int nBlocksLookupRange = nInterval-1;
+    if (fTestNet) {
+        if (pindexLast->nHeight > 89) {
+            nBlocksLookupRange = nInterval;
+        }
+    } else {
+        if (pindexLast->nHeight > 99988) {
+            nBlocksLookupRange = nInterval * 24;
+        }
+    }
     const CBlockIndex* pindexFirst = pindexLast;
-    for (int i = 0; pindexFirst && i < nInterval-1; i++)
+    for (int i = 0; pindexFirst && i < nBlocksLookupRange ; i++)
         pindexFirst = pindexFirst->pprev;
     assert(pindexFirst);
 
     // Limit adjustment step
     int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
+    if (pindexLast->nHeight > 99988) {
+        nActualTimespan = nActualTimespan / 24;
+    }
     printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
     if (nActualTimespan < nTargetTimespan/4)
         nActualTimespan = nTargetTimespan/4;
@@ -1153,6 +1168,8 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     printf("nTargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", nTargetTimespan, nActualTimespan);
     printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
     printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+    printf("first height=%d time=%"PRI64d"\n", pindexFirst->nHeight, pindexFirst->GetBlockTime());
+    printf("last  height=%d time=%"PRI64d"\n", pindexLast->nHeight, pindexLast->GetBlockTime());
 
     return bnNew.GetCompact();
 }
@@ -2061,12 +2078,31 @@ bool CBlock::CheckBlock(CValidationState &state, bool fCheckPOW, bool fCheckMerk
     if (vtx.empty() || vtx.size() > MAX_BLOCK_SIZE || ::GetSerializeSize(*this, SER_NETWORK, PROTOCOL_VERSION) > MAX_BLOCK_SIZE)
         return state.DoS(100, error("CheckBlock() : size limits failed"));
 
+    // Special short-term limits to avoid 10,000 BDB lock limit:
+    if (GetBlockTime() >= 1363867200 && // start enforcing 21 March 2013, noon GMT
+        GetBlockTime() < 1368576000)  // stop enforcing 15 May 2013 00:00:00
+    {
+        // Rule is: #unique txids referenced <= 4,500
+        // ... to prevent 10,000 BDB lock exhaustion on old clients
+        set<uint256> setTxIn;
+        for (size_t i = 0; i < vtx.size(); i++)
+        {
+            setTxIn.insert(vtx[i].GetHash());
+            if (i == 0) continue; // skip coinbase txin
+            BOOST_FOREACH(const CTxIn& txin, vtx[i].vin)
+                setTxIn.insert(txin.prevout.hash);
+        }
+        size_t nTxids = setTxIn.size();
+        if (nTxids > 4500)
+            return error("CheckBlock() : 15 May maxlocks violation");
+    }
+
     // Check proof of work matches claimed amount
     if (fCheckPOW && !CheckProofOfWork(GetHash(), nBits))
         return state.DoS(50, error("CheckBlock() : proof of work failed"));
 
     // Check timestamp
-    if (GetBlockTime() > GetAdjustedTime() + 2 * 60 * 60)
+    if (GetBlockTime() > GetAdjustedTime() + 15 * 60)
         return state.Invalid(error("CheckBlock() : block timestamp too far in the future"));
 
     // First transaction must be coinbase, the rest must not be
@@ -4348,6 +4384,10 @@ CBlockTemplate* CreateNewBlock(CReserveKey& reservekey)
     unsigned int nBlockMaxSize = GetArg("-blockmaxsize", MAX_BLOCK_SIZE_GEN/2);
     // Limit to betweeen 1K and MAX_BLOCK_SIZE-1K for sanity:
     nBlockMaxSize = std::max((unsigned int)1000, std::min((unsigned int)(MAX_BLOCK_SIZE-1000), nBlockMaxSize));
+
+    // Special compatibility rule before 15 May: limit size to 500,000 bytes:
+    if (GetAdjustedTime() < 1368576000)
+        nBlockMaxSize = std::min(nBlockMaxSize, (unsigned int)(MAX_BLOCK_SIZE_GEN));
 
     // How much of the block should be dedicated to high-priority transactions,
     // included regardless of the fees they pay
