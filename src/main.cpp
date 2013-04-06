@@ -1134,7 +1134,12 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
             nBlocksLookupRange = nInterval;
         }
     } else {
-        if (pindexLast->nHeight > 99988) {
+        // dirty spike limitation, until a better algorithm is implemented
+        // this one will restore short diff jumps, but should limit max diff
+        // when 90 blocks went 'abused' by massive hashrate addition
+        if (pindexLast->nHeight > 101908) {
+            nBlocksLookupRange = nInterval * 3;
+        } else if (pindexLast->nHeight > 99988) {
             nBlocksLookupRange = nInterval * 24;
         }
     }
@@ -1145,7 +1150,9 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 
     // Limit adjustment step
     int64 nActualTimespan = pindexLast->GetBlockTime() - pindexFirst->GetBlockTime();
-    if (pindexLast->nHeight > 99988) {
+    if (pindexLast->nHeight > 101908) {
+        nActualTimespan = nActualTimespan / 3;
+    } else if (pindexLast->nHeight > 99988) {
         nActualTimespan = nActualTimespan / 24;
     }
     printf("  nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
