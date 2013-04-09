@@ -1094,6 +1094,95 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
     return bnResult.GetCompact();
 }
 
+unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock) {
+    int64 block_durations[2160];
+    float alpha = 0.09; // closer to 1.0 = faster response to new values
+    float accumulator = 120;
+    const int64 perBlockTargetTimespan = 120; // two mins between blocks
+
+    unsigned int nProofOfWorkLimit = bnProofOfWorkLimit.GetCompact();
+    if (pindexLast == NULL)
+        return nProofOfWorkLimit;
+
+    // If the new block's timestamp is more than 20 minutes
+    // have to be greater than the max accepted time delta ; 15mins.
+    // this way, if one would artificially increase block nTime to its max value,
+    // we'd still take the 5mins periods without block before allowing a one-shot
+    // diff decrase, later keeping the block time used for ema computation.
+    //
+    // then allow mining of a min-difficulty block for testnet,
+    // and a lower diff otherwise:
+    if (pblock->nTime > pindexLast->nTime + perBlockTargetTimespan*10) {
+        if (fTestNet) {
+            printf("TESTNET: allowing min-difficulty mining.\n");
+            return nProofOfWorkLimit;
+        } else {
+            // livenet ; will allow diff/2 unless exiting from apr 9th 2013 stalled state:
+            CBigNum bnNew;
+            bnNew.SetCompact(pindexLast->nBits);
+
+            if (pindexLast->nHeight> 101631 && pindexLast->nHeight < 103791) {
+                // quick exit from apr 9th 2012 stalled state:
+                // (roughly 48 worth of blocks with unusually decreased diff for lon periods without block)
+                bnNew *= 10;
+            } else {
+            // half the last diff, satisfying ?
+                bnNew *= 2;
+            }
+            if (bnNew > bnProofOfWorkLimit)
+                bnNew = bnProofOfWorkLimit;
+
+            printf("RETARGET: artificially lowered diff ; hard time mining current block...\n");
+            printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+            printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+
+            return (bnNew.GetCompact());
+        }
+    }
+
+    // collect last 3 days (30*24*3=2160) blocks durations:
+    const CBlockIndex* pindexFirst = pindexLast;
+    for (int i = 0; pindexFirst && i < 2160 ; i++) {
+        block_durations[2159 - i] = pindexFirst->GetBlockTime() - pindexFirst->pprev->GetBlockTime();
+        if (fTestNet) {
+            printf("EMA: height=%d duration=%"PRI64d"\n", pindexFirst->nHeight, block_durations[2159 - i]);
+        }
+        pindexFirst = pindexFirst->pprev;
+    }
+
+    // compute exponential moving average block duration:
+    // TODO in case of testnet reset, ensure those 2160 blocks exists :p
+    for (int i=0; i<2160 ; i++) {
+        accumulator = (alpha * block_durations[i]) + (1 - alpha) * accumulator;
+        if (fTestNet) {
+            printf("EMA%d:%"PRI64d",%f\n", pindexLast->nHeight, block_durations[i], accumulator);
+        }
+    }
+
+    int64 nActualTimespan = accumulator;
+    printf("GetEmaNextWorkRequired RETARGET nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
+
+    if (nActualTimespan < perBlockTargetTimespan / 2)
+        nActualTimespan = perBlockTargetTimespan / 2;
+    if (nActualTimespan > perBlockTargetTimespan * 4)
+        nActualTimespan = perBlockTargetTimespan * 4;
+
+    // Retarget
+    CBigNum bnNew;
+    bnNew.SetCompact(pindexLast->nBits);
+    bnNew *= nActualTimespan;
+    bnNew /= perBlockTargetTimespan;
+
+    if (bnNew > bnProofOfWorkLimit)
+        bnNew = bnProofOfWorkLimit;
+
+    printf("nTargetTimespan = %"PRI64d" nActualTimespan = %"PRI64d"\n", perBlockTargetTimespan, nActualTimespan);
+    printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+    printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+
+    return bnNew.GetCompact();
+}
+
 unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock)
 {
     unsigned int nProofOfWorkLimit = bnProofOfWorkLimit.GetCompact();
@@ -1101,6 +1190,13 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     // Genesis block
     if (pindexLast == NULL)
         return nProofOfWorkLimit;
+
+    if (fTestNet && pindexLast->nHeight > 5182) {
+        return (GetEmaNextWorkRequired(pindexLast, pblock));
+    } else if (pindexLast->nHeight > 101631) {
+        // activate ema after block 101631
+        return (GetEmaNextWorkRequired(pindexLast, pblock));
+    }
 
     // Only change once per interval
     if ((pindexLast->nHeight+1) % nInterval != 0)
@@ -1134,12 +1230,8 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
             nBlocksLookupRange = nInterval;
         }
     } else {
-        // dirty spike limitation, until a better algorithm is implemented
-        // this one will restore short diff jumps, but should limit max diff
-        // when 90 blocks went 'abused' by massive hashrate addition
-        if (pindexLast->nHeight > 101908) {
-            nBlocksLookupRange = nInterval * 3;
-        } else if (pindexLast->nHeight > 99988) {
+        // failed attempt ; amplified spikes effects...
+        if (pindexLast->nHeight > 99988) {
             nBlocksLookupRange = nInterval * 24;
         }
     }
@@ -1175,8 +1267,6 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
     printf("nTargetTimespan = %"PRI64d"    nActualTimespan = %"PRI64d"\n", nTargetTimespan, nActualTimespan);
     printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
     printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
-    printf("first height=%d time=%"PRI64d"\n", pindexFirst->nHeight, pindexFirst->GetBlockTime());
-    printf("last  height=%d time=%"PRI64d"\n", pindexLast->nHeight, pindexLast->GetBlockTime());
 
     return bnNew.GetCompact();
 }
