@@ -1096,7 +1096,7 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
 
 unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock) {
     int64 block_durations[2160];
-    float alpha = 0.10; // closer to 1.0 = faster response to new values
+    float alpha = 0.09; // closer to 1.0 = faster response to new values
     float accumulator = 120;
     const int64 perBlockTargetTimespan = 120; // two mins between blocks
 
@@ -1104,18 +1104,31 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     if (pindexLast == NULL)
         return nProofOfWorkLimit;
 
-    // If the new block's timestamp is more than 10 minutes
+    // If the new block's timestamp is more than 20 minutes
+    // have to be greater than the max accepted time delta ; 15mins.
+    // this way, if one would artificially increase block nTime to its max value,
+    // we'd still take the 5mins periods without block before allowing a one-shot
+    // diff decrase, later keeping the block time used for ema computation.
+    //
     // then allow mining of a min-difficulty block for testnet,
     // and a lower diff otherwise:
-    if (pblock->nTime > pindexLast->nTime + perBlockTargetTimespan*5) {
+    if (pblock->nTime > pindexLast->nTime + perBlockTargetTimespan*10) {
         if (fTestNet) {
             printf("TESTNET: allowing min-difficulty mining.\n");
             return nProofOfWorkLimit;
         } else {
-            // half the last diff satisfying ?
+            // livenet ; will allow diff/2 unless exiting from apr 9th 2013 stalled state:
             CBigNum bnNew;
             bnNew.SetCompact(pindexLast->nBits);
-            bnNew *= 2;
+
+            if (pindexLast->nHeight> 101631 && pindexLast->nHeight < 103791) {
+                // quick exit from apr 9th 2012 stalled state:
+                // (roughly 48 worth of blocks with unusually decreased diff for lon periods without block)
+                bnNew *= 10;
+            } else {
+            // half the last diff, satisfying ?
+                bnNew *= 2;
+            }
             if (bnNew > bnProofOfWorkLimit)
                 bnNew = bnProofOfWorkLimit;
 
@@ -1131,7 +1144,9 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < 2160 ; i++) {
         block_durations[2159 - i] = pindexFirst->GetBlockTime() - pindexFirst->pprev->GetBlockTime();
-        printf("EMA: height=%d duration=%"PRI64d"\n", pindexFirst->nHeight, block_durations[2159 - i]);
+        if (fTestNet) {
+            printf("EMA: height=%d duration=%"PRI64d"\n", pindexFirst->nHeight, block_durations[2159 - i]);
+        }
         pindexFirst = pindexFirst->pprev;
     }
 
@@ -1178,6 +1193,9 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
 
     if (fTestNet && pindexLast->nHeight > 5182) {
         return (GetEmaNextWorkRequired(pindexLast, pblock));
+    } else if (pindexLast->nHeight > 101631) {
+        // activate ema after block 101631
+        return (GetEmaNextWorkRequired(pindexLast, pblock));
     }
 
     // Only change once per interval
@@ -1212,12 +1230,8 @@ unsigned int static GetNextWorkRequired(const CBlockIndex* pindexLast, const CBl
             nBlocksLookupRange = nInterval;
         }
     } else {
-        // dirty spike limitation, until a better algorithm is implemented
-        // this one will restore short diff jumps, but should limit max diff
-        // when 90 blocks went 'abused' by massive hashrate addition
-        if (pindexLast->nHeight > 101908) {
-            nBlocksLookupRange = nInterval * 3;
-        } else if (pindexLast->nHeight > 99988) {
+        // failed attempt ; amplified spikes effects...
+        if (pindexLast->nHeight > 99988) {
             nBlocksLookupRange = nInterval * 24;
         }
     }
