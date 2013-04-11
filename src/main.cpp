@@ -3372,6 +3372,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // 69.195.155 96.43.135 208.110.68 = eclipsemc
         // 176.9.104 = bitminter
         // 62.113.214 192.198.93 59.167.117 = ozcoin
+        // 72.135.241.30 = big fake blocks from here
         if (boost::algorithm::starts_with(pfrom->addr.ToString(), "23.21.225")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "176.31.157")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "46.4.121")
@@ -3382,7 +3383,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "176.9.104")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "62.113.214")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "192.198.93")
-                || boost::algorithm::starts_with(pfrom->addr.ToString(), "59.167.117"))
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "59.167.117")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "72.135.241"))
         {
             pfrom->Misbehaving(100);
             //printf("Banned remote node from addr=%s ; known terracoin pool.\n", pfrom->addr.ToString().c_str());
@@ -3883,7 +3885,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         CBlock block;
         vRecv >> block;
 
-        printf("received block %s\n", BlockHashStr(block.GetHash()).c_str());
+        printf("received block %s from %s\n", BlockHashStr(block.GetHash()).c_str(), pfrom->addr.ToString().c_str());
         // block.print();
 
         CInv inv(MSG_BLOCK, block.GetHash());
