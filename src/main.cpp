@@ -1144,6 +1144,13 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < 2160 ; i++) {
         block_durations[2159 - i] = pindexFirst->GetBlockTime() - pindexFirst->pprev->GetBlockTime();
+        if (block_durations[2159 - i] < 0 && pindexLast->nHeight > 104290) {
+            // seen attempts at increasing ntime to its max value,
+            // currently eliminated by averaging, but with low net speed,
+            // this could finally alter the averaged diff badly when chained.
+            // one may still chain them, but this is 51% .. no glory
+            block_durations[2159 - i] = perBlockTargetTimespan;
+        }
         if (fTestNet) {
             printf("EMA: height=%d duration=%"PRI64d"\n", pindexFirst->nHeight, block_durations[2159 - i]);
         }
@@ -1155,7 +1162,9 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     for (int i=0; i<2160 ; i++) {
         accumulator = (alpha * block_durations[i]) + (1 - alpha) * accumulator;
         if (fTestNet) {
-            printf("EMA%d:%"PRI64d",%f\n", pindexLast->nHeight, block_durations[i], accumulator);
+            CBlockIndex *blk = FindBlockByHeight((int) pindexLast->nHeight - (2159 - i));
+            // EMA<last_height>:height,diff,duration,ema
+            printf("EMA%d:%d,%f,%"PRI64d",%f\n", pindexLast->nHeight, pindexLast->nHeight - (2159 - i), GetDifficulty(blk), block_durations[i], accumulator);
         }
     }
 
