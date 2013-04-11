@@ -1144,6 +1144,13 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < 2160 ; i++) {
         block_durations[2159 - i] = pindexFirst->GetBlockTime() - pindexFirst->pprev->GetBlockTime();
+        if (block_durations[2159 - i] < 0 && pindexLast->nHeight > 104290) {
+            // seen attempts at increasing ntime to its max value,
+            // currently eliminated by averaging, but with low net speed,
+            // this could finally alter the averaged diff badly when chained.
+            // one may still chain them, but this is 51% .. no glory
+            block_durations[2159 - i] = perBlockTargetTimespan;
+        }
         if (fTestNet) {
             printf("EMA: height=%d duration=%"PRI64d"\n", pindexFirst->nHeight, block_durations[2159 - i]);
         }
@@ -1155,7 +1162,9 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     for (int i=0; i<2160 ; i++) {
         accumulator = (alpha * block_durations[i]) + (1 - alpha) * accumulator;
         if (fTestNet) {
-            printf("EMA%d:%"PRI64d",%f\n", pindexLast->nHeight, block_durations[i], accumulator);
+            CBlockIndex *blk = FindBlockByHeight((int) pindexLast->nHeight - (2159 - i));
+            // EMA<last_height>:height,diff,duration,ema
+            printf("EMA%d:%d,%f,%"PRI64d",%f\n", pindexLast->nHeight, pindexLast->nHeight - (2159 - i), GetDifficulty(blk), block_durations[i], accumulator);
         }
     }
 
@@ -3363,6 +3372,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // 69.195.155 96.43.135 208.110.68 = eclipsemc
         // 176.9.104 = bitminter
         // 62.113.214 192.198.93 59.167.117 = ozcoin
+        // 72.135.241.30 = big fake blocks from here
         if (boost::algorithm::starts_with(pfrom->addr.ToString(), "23.21.225")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "176.31.157")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "46.4.121")
@@ -3373,7 +3383,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "176.9.104")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "62.113.214")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "192.198.93")
-                || boost::algorithm::starts_with(pfrom->addr.ToString(), "59.167.117"))
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "59.167.117")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "72.135.241"))
         {
             pfrom->Misbehaving(100);
             //printf("Banned remote node from addr=%s ; known terracoin pool.\n", pfrom->addr.ToString().c_str());
@@ -3874,7 +3885,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         CBlock block;
         vRecv >> block;
 
-        printf("received block %s\n", BlockHashStr(block.GetHash()).c_str());
+        printf("received block %s from %s\n", BlockHashStr(block.GetHash()).c_str(), pfrom->addr.ToString().c_str());
         // block.print();
 
         CInv inv(MSG_BLOCK, block.GetHash());
