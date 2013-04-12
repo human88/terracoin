@@ -1122,13 +1122,24 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
             bnNew.SetCompact(pindexLast->nBits);
 
             if (pindexLast->nHeight> 101631 && pindexLast->nHeight < 103791) {
-                // quick exit from apr 9th 2012 stalled state:
-                // (roughly 48 worth of blocks with unusually decreased diff for lon periods without block)
+                //insane difficulty drop ; until the network gets big enough, and not abused anymore
                 bnNew *= 10;
             } else {
-            // half the last diff, satisfying ?
+                // half the last diff, sucks too, but with a big enough network,
+                // no block should take 20 minutes to be mined!
+                // will be updated/removed in the future
                 bnNew *= 2;
             }
+
+            // super ugly way to never, ever return diff < 5254:
+            if (pindexLast->nHeight > 104290) {
+                CBigNum fiveThousandsLimit;
+                fiveThousandsLimit.SetCompact(0x1b0c7898);
+                if (bnNew > fiveThousandsLimit) {
+                    bnNew = fiveThousandsLimit;
+                }
+            }
+
             if (bnNew > bnProofOfWorkLimit)
                 bnNew = bnProofOfWorkLimit;
 
@@ -1145,10 +1156,10 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     for (int i = 0; pindexFirst && i < 2160 ; i++) {
         block_durations[2159 - i] = pindexFirst->GetBlockTime() - pindexFirst->pprev->GetBlockTime();
         if (block_durations[2159 - i] < 0 && pindexLast->nHeight > 104290) {
-            // seen attempts at increasing ntime to its max value,
+            // attempts at increasing ntime to its max value,
             // currently eliminated by averaging, but with low net speed,
             // this could finally alter the averaged diff badly when chained.
-            // one may still chain them, but this is 51% .. no glory
+            // one may still chain them with enough hashpower, but this is 51% .. no glory here
             block_durations[2159 - i] = perBlockTargetTimespan;
         }
         if (fTestNet) {
@@ -1161,15 +1172,21 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     // TODO in case of testnet reset, ensure those 2160 blocks exists :p
     for (int i=0; i<2160 ; i++) {
         accumulator = (alpha * block_durations[i]) + (1 - alpha) * accumulator;
+
         if (fTestNet) {
             CBlockIndex *blk = FindBlockByHeight((int) pindexLast->nHeight - (2159 - i));
-            // EMA<last_height>:height,diff,duration,ema
-            printf("EMA%d:%d,%f,%"PRI64d",%f\n", pindexLast->nHeight, pindexLast->nHeight - (2159 - i), GetDifficulty(blk), block_durations[i], accumulator);
+            if (blk) {
+                // csv-like logging ; grep/sed 'EMA424242:' for easy plotting
+                // EMA<last_height>:height,diff,duration,ema
+                printf("EMA%d:%d,%f,%"PRI64d",%f\n", pindexLast->nHeight, pindexLast->nHeight - (2159 - i), GetDifficulty(blk), block_durations[i], accumulator);
+            }
         }
     }
 
     int64 nActualTimespan = accumulator;
-    printf("GetEmaNextWorkRequired RETARGET nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
+    if (fTestNet) {
+        printf("GetEmaNextWorkRequired RETARGET nActualTimespan = %"PRI64d"  before bounds\n", nActualTimespan);
+    }
 
     if (nActualTimespan < perBlockTargetTimespan / 2)
         nActualTimespan = perBlockTargetTimespan / 2;
@@ -1182,12 +1199,23 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     bnNew *= nActualTimespan;
     bnNew /= perBlockTargetTimespan;
 
+    // super ugly way to never, ever return diff < 5254:
+    if (pindexLast->nHeight > 104290) {
+        CBigNum fiveThousandsLimit;
+        fiveThousandsLimit.SetCompact(0x1b0c7898);
+        if (bnNew > fiveThousandsLimit) {
+            bnNew = fiveThousandsLimit;
+        }
+    }
+
     if (bnNew > bnProofOfWorkLimit)
         bnNew = bnProofOfWorkLimit;
 
-    printf("nTargetTimespan = %"PRI64d" nActualTimespan = %"PRI64d"\n", perBlockTargetTimespan, nActualTimespan);
-    printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
-    printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+    if (fTestNet) {
+        printf("nTargetTimespan = %"PRI64d" nActualTimespan = %"PRI64d"\n", perBlockTargetTimespan, nActualTimespan);
+        printf("Before: %08x  %s\n", pindexLast->nBits, CBigNum().SetCompact(pindexLast->nBits).getuint256().ToString().c_str());
+        printf("After:  %08x  %s\n", bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
+    }
 
     return bnNew.GetCompact();
 }
