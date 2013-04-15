@@ -1,0 +1,7 @@
+terracoin v0.1.3rc3 :
+      [core] retargetting: slower difficulty adjustments, eliminate future nTime effects.
+      [difficulty] symetrical diff increase bounds
+      [difficulty] lower response time, symetrical target capping.
+      critical,update: mandatory update at block 110322
+      comment,minor,deprecated
+
