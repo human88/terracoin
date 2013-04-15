@@ -1155,6 +1155,20 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < 2160 ; i++) {
         block_durations[2159 - i] = pindexFirst->GetBlockTime() - pindexFirst->pprev->GetBlockTime();
+
+        if (pindexLast->nHeight > 118658) {
+            // slow down difficulty decrease even more,
+            // also limit the effect of future nTime values (actually annihilates them):
+            if (block_durations[2159 - i] > (2 * perBlockTargetTimespan) ) {
+                block_durations[2159 - i] = 2 * perBlockTargetTimespan;
+            }
+
+            // slow down difficulty increase:
+            if ((block_durations[2159 - i] >= 0) && (block_durations[2159 - i] < (perBlockTargetTimespan / 2)) ) {
+                block_durations[2159 - i] = perBlockTargetTimespan / 2;
+            }
+        }
+
         if (block_durations[2159 - i] < 0 && pindexLast->nHeight > 104290) {
             // attempts at increasing ntime to its max value,
             // currently eliminated by averaging, but with low net speed,
