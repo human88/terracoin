@@ -3408,6 +3408,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // take alt chains out of the game:
         // TODO use something nicer than this ugly test:
         // 23.21.225.111 = mining.eligius.st
+        // 78.47.187.248 - 78.47.187.255 'Eligius Pool' / 'abuse@hetzner.de'
         // 176.31.157.133 = slush
         // 46.4.121.120 = deepbit
         // 50.31.149 = btcguild
@@ -3416,6 +3417,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // 62.113.214 192.198.93 59.167.117 = ozcoin
         // 72.135.241.30 = big fake blocks from here
         if (boost::algorithm::starts_with(pfrom->addr.ToString(), "23.21.225")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "78.47.187")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "176.31.157")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "46.4.121")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "50.31.149")
@@ -3429,7 +3431,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "72.135.241"))
         {
             pfrom->Misbehaving(100);
-            //printf("Banned remote node from addr=%s ; known terracoin pool.\n", pfrom->addr.ToString().c_str());
+            //printf("Banned remote node from addr=%s ; known btc pool.\n", pfrom->addr.ToString().c_str());
             return (false);
         }
 
