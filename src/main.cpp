@@ -1097,7 +1097,7 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
 unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock) {
     int64 block_durations[2160];
     float alpha = 0.09; // closer to 1.0 = faster response to new values
-    if (pindexLast->nHeight > 118658) {
+    if (pindexLast->nHeight > 110322) {
         alpha = 0.06;
     }
     float accumulator = 120;
@@ -1160,7 +1160,7 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     for (int i = 0; pindexFirst && i < 2160 ; i++) {
         block_durations[2159 - i] = pindexFirst->GetBlockTime() - pindexFirst->pprev->GetBlockTime();
 
-        if (pindexLast->nHeight > 118658) {
+        if (pindexLast->nHeight > 110322) {
             // slow down difficulty decrease even more,
             // also limit the effect of future nTime values (actually annihilates them):
             if (block_durations[2159 - i] > (1.5 * perBlockTargetTimespan) ) {
@@ -1208,7 +1208,7 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
 
     if (nActualTimespan < perBlockTargetTimespan / 2)
         nActualTimespan = perBlockTargetTimespan / 2;
-    if (pindexLast->nHeight > 118658) {
+    if (pindexLast->nHeight > 110322) {
         // symetrical adjustments, both sides:
         if (nActualTimespan > perBlockTargetTimespan * 2) {
             nActualTimespan = perBlockTargetTimespan * 2;
@@ -3418,7 +3418,11 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
 
         // ban known bitcoin pools ip addresses, in case one of them want (again) to
         // take alt chains out of the game:
-        // TODO use something nicer than this ugly test:
+        // NOTE: absolutely nothing indicates any of those famous people/pools were
+        // involved in anything, this was an earlier preventive measure, mostly useless for
+        // many reasons (ipv6, changed netblocks, ...)
+        //
+        // TODO remove this :p
         // 23.21.225.111 = mining.eligius.st / http://aws-portal.amazon.com/gp/aws/html-forms-controller/contactus/AWSAbuse
         // 78.47.187.248 - 78.47.187.255 'Eligius Pool' / 'abuse@hetzner.de'
         // 176.31.157.133 = slush
