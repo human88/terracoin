@@ -1159,8 +1159,8 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
         if (pindexLast->nHeight > 118658) {
             // slow down difficulty decrease even more,
             // also limit the effect of future nTime values (actually annihilates them):
-            if (block_durations[2159 - i] > (2 * perBlockTargetTimespan) ) {
-                block_durations[2159 - i] = 2 * perBlockTargetTimespan;
+            if (block_durations[2159 - i] > (1.5 * perBlockTargetTimespan) ) {
+                block_durations[2159 - i] = 1.5 * perBlockTargetTimespan;
             }
 
             // slow down difficulty increase:
