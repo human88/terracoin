@@ -3407,7 +3407,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // ban known bitcoin pools ip addresses, in case one of them want (again) to
         // take alt chains out of the game:
         // TODO use something nicer than this ugly test:
-        // 23.21.225.111 = mining.eligius.st
+        // 23.21.225.111 = mining.eligius.st / http://aws-portal.amazon.com/gp/aws/html-forms-controller/contactus/AWSAbuse
         // 78.47.187.248 - 78.47.187.255 'Eligius Pool' / 'abuse@hetzner.de'
         // 176.31.157.133 = slush
         // 46.4.121.120 = deepbit
