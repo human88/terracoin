@@ -1155,6 +1155,20 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     const CBlockIndex* pindexFirst = pindexLast;
     for (int i = 0; pindexFirst && i < 2160 ; i++) {
         block_durations[2159 - i] = pindexFirst->GetBlockTime() - pindexFirst->pprev->GetBlockTime();
+
+        if (pindexLast->nHeight > 118658) {
+            // slow down difficulty decrease even more,
+            // also limit the effect of future nTime values (actually annihilates them):
+            if (block_durations[2159 - i] > (2 * perBlockTargetTimespan) ) {
+                block_durations[2159 - i] = 2 * perBlockTargetTimespan;
+            }
+
+            // slow down difficulty increase:
+            if ((block_durations[2159 - i] >= 0) && (block_durations[2159 - i] < (perBlockTargetTimespan / 2)) ) {
+                block_durations[2159 - i] = perBlockTargetTimespan / 2;
+            }
+        }
+
         if (block_durations[2159 - i] < 0 && pindexLast->nHeight > 104290) {
             // attempts at increasing ntime to its max value,
             // currently eliminated by averaging, but with low net speed,
@@ -3393,7 +3407,8 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // ban known bitcoin pools ip addresses, in case one of them want (again) to
         // take alt chains out of the game:
         // TODO use something nicer than this ugly test:
-        // 23.21.225.111 = mining.eligius.st
+        // 23.21.225.111 = mining.eligius.st / http://aws-portal.amazon.com/gp/aws/html-forms-controller/contactus/AWSAbuse
+        // 78.47.187.248 - 78.47.187.255 'Eligius Pool' / 'abuse@hetzner.de'
         // 176.31.157.133 = slush
         // 46.4.121.120 = deepbit
         // 50.31.149 = btcguild
@@ -3402,6 +3417,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         // 62.113.214 192.198.93 59.167.117 = ozcoin
         // 72.135.241.30 = big fake blocks from here
         if (boost::algorithm::starts_with(pfrom->addr.ToString(), "23.21.225")
+                || boost::algorithm::starts_with(pfrom->addr.ToString(), "78.47.187")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "176.31.157")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "46.4.121")
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "50.31.149")
@@ -3415,7 +3431,7 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
                 || boost::algorithm::starts_with(pfrom->addr.ToString(), "72.135.241"))
         {
             pfrom->Misbehaving(100);
-            //printf("Banned remote node from addr=%s ; known terracoin pool.\n", pfrom->addr.ToString().c_str());
+            //printf("Banned remote node from addr=%s ; known btc pool.\n", pfrom->addr.ToString().c_str());
             return (false);
         }
 
