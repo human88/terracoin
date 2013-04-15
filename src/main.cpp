@@ -1097,6 +1097,9 @@ unsigned int ComputeMinWork(unsigned int nBase, int64 nTime)
 unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock) {
     int64 block_durations[2160];
     float alpha = 0.09; // closer to 1.0 = faster response to new values
+    if (pindexLast->nHeight > 118658) {
+        alpha = 0.06;
+    }
     float accumulator = 120;
     const int64 perBlockTargetTimespan = 120; // two mins between blocks
 
@@ -1104,14 +1107,15 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     if (pindexLast == NULL)
         return nProofOfWorkLimit;
 
-    // If the new block's timestamp is more than 20 minutes
-    // have to be greater than the max accepted time delta ; 15mins.
+    // If last block was found more than 20mins ago:
+    // (have to be greater than the max accepted time delta ; 15mins)
+    // then allow mining of a min-difficulty block for testnet,
+    // and a lower diff otherwise.
+    //
     // this way, if one would artificially increase block nTime to its max value,
     // we'd still take the 5mins periods without block before allowing a one-shot
     // diff decrase, later keeping the block time used for ema computation.
     //
-    // then allow mining of a min-difficulty block for testnet,
-    // and a lower diff otherwise:
     if (pblock->nTime > pindexLast->nTime + perBlockTargetTimespan*10) {
         if (fTestNet) {
             printf("TESTNET: allowing min-difficulty mining.\n");
@@ -1204,8 +1208,16 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
 
     if (nActualTimespan < perBlockTargetTimespan / 2)
         nActualTimespan = perBlockTargetTimespan / 2;
-    if (nActualTimespan > perBlockTargetTimespan * 4)
-        nActualTimespan = perBlockTargetTimespan * 4;
+    if (pindexLast->nHeight > 118658) {
+        // symetrical adjustments, both sides:
+        if (nActualTimespan > perBlockTargetTimespan * 2) {
+            nActualTimespan = perBlockTargetTimespan * 2;
+        }
+    } else {
+        if (nActualTimespan > perBlockTargetTimespan * 4) {
+            nActualTimespan = perBlockTargetTimespan * 4;
+        }
+    }
 
     // Retarget
     CBigNum bnNew;
@@ -1213,7 +1225,7 @@ unsigned int static GetEmaNextWorkRequired(const CBlockIndex* pindexLast, const 
     bnNew *= nActualTimespan;
     bnNew /= perBlockTargetTimespan;
 
-    // super ugly way to never, ever return diff < 5254:
+    // temporary, super ugly way to never, ever return diff < 5254:
     if (pindexLast->nHeight > 104290) {
         CBigNum fiveThousandsLimit;
         fiveThousandsLimit.SetCompact(0x1b0c7898);
