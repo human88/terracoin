@@ -3811,7 +3811,12 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv)
         if (pindex)
             pindex = pindex->pnext;
         int nLimit = 500;
-        printf("getblocks %d to %s limit %d\n", (pindex ? pindex->nHeight : -1), BlockHashStr(hashStop).c_str(), nLimit);
+        if (pfrom) {
+            printf("getblocks %d to %s limit %d from %s\n", (pindex ? pindex->nHeight : -1), BlockHashStr(hashStop).c_str(), nLimit, pfrom->addr.ToString().c_str());
+        } else {
+            printf("getblocks %d to %s limit %d\n", (pindex ? pindex->nHeight : -1), BlockHashStr(hashStop).c_str(), nLimit);
+        }
+
         for (; pindex; pindex = pindex->pnext)
         {
             if (pindex->GetBlockHash() == hashStop)
