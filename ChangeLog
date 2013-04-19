@@ -1,6 +1,5 @@
 terracoin v0.1.3rc4 :
-      [checkpoints] minor,cp: new cp added
-      [checkpoints] minor,cp: new cp added
+      [checkpoints] minor,cp: multiple checkpoints added.
       [checkpoints] logging,cp: new cp & verbose cp test log output added.
 
 terracoin release-0.1.3-41 :
